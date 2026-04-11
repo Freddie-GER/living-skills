@@ -1,37 +1,48 @@
 # Living Checklist — Advocatus Diaboli
 
-**Zweck:** Akkumulierte Prüfkriterien aus realen Sessions. Wird nach jeder Nutzung erweitert.  
-**Karpathy-Prinzip:** Jede Session macht den nächsten Durchlauf besser.
+**Purpose:** Accumulated review patterns from real sessions. Extended after every use.
 
 ---
 
-## Format für neue Einträge
-
-```
-### [DATUM] — [Analysetyp]
-**Gefundenes Muster:** [Was wurde übersehen]
-**Warum übersehen:** [Struktureller Grund]
-**Prüfkriterium:** [Konkrete Frage die künftig immer gestellt werden soll]
-```
+### [YYYY-MM-DD] — [Analysis type]
+**Learning:** What pattern was found / what failed
+**Why it matters:** Structural reason it was missed
+**Rule:** Concrete check to apply in future sessions
 
 ---
 
-## Einträge
+## Entries
 
-### 2026-04-10 — Politische Strategie-Analyse (FDP-Studie)
+### 2026-04-10 — Political Strategy Analysis
 
-**Gefundenes Muster:** Historische Narrative werden als Fakten übernommen ohne Gegenprüfung  
-**Warum übersehen:** Bei etablierten politischen Akteuren existiert viel publiziertes Material — der erste Output aggregiert dieses Material, ohne zu fragen ob die Narrative selbst korrekt sind  
-**Prüfkriterium:** Bei jeder historischen Kausalbehauptung fragen: "Wer sagt das, und wer würde widersprechen?"
+**Learning:** Historical narratives adopted as facts without verification
+**Why it matters:** With established political actors, large bodies of published material exist — first-pass output aggregates this material without questioning whether the narratives themselves are accurate
+**Rule:** For every historical causal claim, ask: "Who says this, and who would disagree?"
 
-**Gefundenes Muster:** Opportunity-Felder werden als "gesättigt" abgeschrieben ohne zu prüfen ob die Sättigung real oder nur wahrgenommen ist  
-**Warum übersehen:** Wettbewerbsanalyse schaut auf aktuelle Akteure, nicht auf unbesetzte Kombinationen  
-**Prüfkriterium:** Bei jedem "gesättigten Raum": Gibt es eine Kombination aus zwei Themen die kein Akteur glaubwürdig besetzt?
+**Learning:** Opportunity spaces dismissed as "saturated" without checking whether saturation is real or perceived
+**Why it matters:** Competitive analysis looks at existing actors, not at unclaimed combinations
+**Rule:** For every "saturated space": Is there a combination of two topics that no actor credibly occupies?
 
-**Gefundenes Muster:** Zielgruppen-Analysen übernehmen Eigen- und Fremdwahrnehmung ohne Trennung  
-**Warum übersehen:** "Die FDP wird als Klientelpartei wahrgenommen" ist eine Fremdwahrnehmung — wird aber als strukturelle Tatsache behandelt  
-**Prüfkriterium:** Immer trennen: Was ist Selbstbild, was ist Fremdwahrnehmung, was ist belegbare Realität?
+**Learning:** Audience analyses conflate self-image and external perception without separation
+**Why it matters:** "Party X is perceived as a clientelist party" is external perception — but is treated as structural fact
+**Rule:** Always separate: What is self-image, what is external perception, what is verifiable reality?
 
 ---
 
-*Weitere Einträge folgen nach jeder Session.*
+### 2026-04-11 — Meta: Living Skills Framework Self-Onboarding (Cursor)
+
+**Learning:** "Framework + docs = complete self-onboarding" is false — team charter (who writes where) lives outside the Living Skills spec, e.g. only in the host repo's CLAUDE.md or equivalent
+**Why it matters:** Living Skills addresses Git/rituals/skill paths, not organization-specific identity and folder rules of the host repo
+**Rule:** Before claiming "self-onboarding possible", ask: Which rules are defined **in the host repo** (Team Memory, CLAUDE.md) vs. **in the framework** itself?
+
+**Learning:** Tutorial paths (`skills/<name>/`) diverge from real-world layouts (e.g. `Team Memory/skills/<name>/`) — a new instance can read the wrong relative path
+**Why it matters:** Framework spec and templates assume `skills/` at repo root; forks with different structures are not marked as deviations
+**Rule:** At onboarding step one, verify physically where `Skill.md` lives (via `find` or README) — do not assume from framework examples
+
+**Learning:** `setup/agent-configuration.md` marks Cursor config as **untested** — yet it was used as-is for a production self-onboarding
+**Why it matters:** Assumed parity between Claude Code and Cursor without validating differences (sandboxing, `git push` access, hook behavior)
+**Rule:** With Cursor: explicitly verify — unsandboxed shell, `git push` once manually confirmed, rule file set to `alwaysApply` vs. context-specific
+
+---
+
+*Further entries follow after each session.*

@@ -1,0 +1,59 @@
+---
+description: Living Skills session rituals — read before working with any skill in this repo
+alwaysApply: true
+---
+
+# Living Skills — Session Rituals
+
+## What are Living Skills?
+
+Skills with persistent memory. Each skill is a directory containing:
+- `Skill.md` — methodology and process
+- `living-checklist.md` — accumulated learnings from every session
+- `revisionslog.md` — change history of Skill.md
+
+## Available Skills
+
+Adapt this table to your repository layout:
+
+| Path | Use for |
+|------|---------|
+| `Team Memory/skills/advocatus-diaboli/` | Adversarial review — critical analysis of documents, strategies, plans |
+| `Team Memory/skills/skill-creator/` | Creating a new Living Skill |
+| `Infrastructure/skills/home-assistant/` | Home Assistant automations and debugging |
+
+> **Note:** Adjust these paths to match where your skills actually live.
+> Check your repo's README or CLAUDE.md for the actual layout.
+
+## Session Start (when a skill is relevant)
+
+1. Read `Skill.md` — understand the approach
+2. Read `living-checklist.md` — load accumulated knowledge
+3. Apply relevant checklist entries to the current task
+
+This step is not optional. Skipping it ignores the core promise of the framework.
+
+## Session End
+
+Write new learnings to `living-checklist.md`:
+
+```
+### [YYYY-MM-DD] — [Task context]
+**Learning:** What was discovered / what failed
+**Why it matters:** Context and consequences
+**Rule:** Concrete actionable guideline for future sessions
+```
+
+Then commit: `<YourInstanceName>: <skill-name> — session [YYYY-MM-DD]`
+
+## Instance Identity and Write Boundaries
+
+Each agent instance writes **only to its own designated area** (e.g. `Team Memory/<instance-name>/`).
+Other instances' memory areas are read-only — even if the task seems to call for it.
+
+Your identity: set this in your repo's CLAUDE.md or equivalent config file.
+
+## Why This Matters
+
+Without writing back after each session, the living-checklist stays static.
+The system only improves if instances consistently follow both rituals.

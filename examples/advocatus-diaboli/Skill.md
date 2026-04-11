@@ -1,113 +1,113 @@
 ---
 name: "Advocatus Diaboli"
-description: "Iterative adversariale Review: demontiert Annahmen, sucht Gegenargumente, akkumuliert Erkenntnisse über Sessions hinweg. Trigger: 'advocatus diaboli', 'devil's advocate', 'kritisch durchgehen'."
+description: "Iterative adversarial review: dismantles assumptions, finds counterarguments, accumulates learnings across sessions. Use for ANY critical analysis — strategy, architecture, plans, documents."
+type: "behavioral"
 ---
 
 # Advocatus Diaboli — Iterative Adversarial Review
 
-**Gilt für:** Claude Proxmox + Claude Mac  
-**Trigger:** "advocatus diaboli" / "devil's advocate" / "kritisch durchgehen"
+**Trigger:** "advocatus diaboli" / "devil's advocate" / "review critically" / "tear this apart"
 
 ---
 
-## Zwei Modi
+## Session Start
 
-### Modus A: Volle Iteration (Claude Proxmox oder Claude Mac)
-- Min. 2, max. 4 Adversarial Review Schleifen
-- Erkenntnisse werden nach jeder Session in `living-checklist.md` zurückgeschrieben
-- Der Skill wird mit jeder Nutzung besser (Karpathy-Prinzip)
-- Kein Kontextfenster-Problem: Zwischenstände explizit dokumentiert
+1. Read `Skill.md` — understand the process and stop criteria
+2. Read `living-checklist.md` — load accumulated patterns from prior sessions
+3. Apply relevant checklist entries as additional review criteria
 
-### Modus B: Einzel-Iteration (Cowork)
-- Eine Adversarial Review + eine Revision
-- Kein Lernmechanismus, kein Filesystem-Zugriff
-- Sinnvoll für schnelle Sessions, nicht für komplexe Analysen
-- ZIP-Paket: `cowork/advocatus-diaboli.zip`
+## Process
 
----
+### Step 1 — Receive the analysis
+Confirm briefly what you received as input. Ask if needed:
+- Entire analysis or specific section?
+- Already-known weaknesses to focus on?
+- Desired iteration depth (2–4)?
 
-## Ablauf (Modus A)
+### Step 2 — Adversarial Review
 
-### Schritt 1 — Analyse entgegennehmen
-Bestätige kurz was du als Input erhalten hast. Frage ggf.:
-- Gesamte Analyse oder spezifischer Abschnitt?
-- Bereits bekannte Schwachstellen?
-- Gewünschte Iterations-Tiefe (2–4)?
-
-### Schritt 2 — Living Checklist laden
-Lies `living-checklist.md` — das sind die akkumulierten Prüfkriterien aus früheren Sessions. Diese ergänzen die Standard-Checkliste.
-
-### Schritt 3 — Adversarial Review
+Run each iteration using this structure:
 
 ```
 ADVERSARIAL REVIEW — ITERATION [N]
 
-STANDARD-CHECKLISTE:
-1. UNGEPRÜFTE ANNAHMEN
-   [Zitat + Gegenargument]
+STANDARD CHECKLIST:
+1. UNCHECKED ASSUMPTIONS
+   [Quote + counterargument]
 
-2. FEHLENDE GEGENARGUMENTE
-   [Was fehlt + warum relevant]
+2. MISSING COUNTERARGUMENTS
+   [What's missing + why it matters]
 
-3. BESTÄTIGUNGSFEHLER
-   [Narrative wiederholt statt geprüft]
+3. CONFIRMATION BIAS
+   [Narratives repeated instead of examined]
 
-4. BLINDE FLECKEN
-   [Was fehlt komplett]
+4. BLIND SPOTS
+   [What's entirely absent]
 
-5. OPERATIVE SCHWÄCHE
-   [Zu generisch / unrealistisch / risikoignorierend]
+5. OPERATIONAL WEAKNESS
+   [Too generic / unrealistic / ignores risk]
 
-SESSION-SPEZIFISCHE KRITERIEN (aus living-checklist.md):
-[Einträge aus Living Checklist anwenden]
+SESSION-SPECIFIC CRITERIA (from living-checklist.md):
+[Apply relevant entries from the living checklist]
 
-SCHWÄCHEN GESAMT: [N]
-STOP-KRITERIUM ERREICHT: Ja / Nein
+WEAKNESSES TOTAL: [N]
+STOP CRITERION MET: Yes / No
 ```
 
-### Schritt 4 — Diskussion
-Welche Schwächen sind berechtigt? Was wird wie tief revidiert?
+### Step 3 — Discussion
+Which weaknesses are valid? What gets revised, to what depth?
 
-### Schritt 5 — Revision
-Überarbeite die Analyse. Revisionslog anhängen.
+### Step 4 — Revision
+Revise the analysis. Append a revision log.
 
-### Schritt 6 — Wiederholen bis Stop-Kriterium erfüllt
+### Step 5 — Repeat until stop criterion met
 
-### Schritt 7 — Living Checklist aktualisieren
-Nach Abschluss: Neue Muster und Erkenntnisse in `living-checklist.md` schreiben.  
-Format: Was wurde gefunden + in welchem Analysetyp + warum übersehen.
+## Stop Criteria
+
+| Category | Threshold |
+|----------|-----------|
+| Unchecked assumptions | ≤ 1 |
+| Missing counterarguments | ≤ 1 |
+| Confirmation bias | 0 |
+| Blind spots | ≤ 1 |
+| Operational weakness | ≤ 1 |
+
+**STOP when:** All below threshold AND minimum 2 iterations completed. Maximum 4 iterations.
+
+## Session End
+
+After the final iteration:
+
+1. Identify new patterns: What was systematically missed? Why?
+2. Write entries to `living-checklist.md` using the format below
+3. Git commit: `<Instance>: advocatus-diaboli — session [YYYY-MM-DD]`
+
+**Entry format:**
+
+```
+### [YYYY-MM-DD] — [Analysis type]
+**Learning:** What pattern was found / what failed
+**Why it matters:** Structural reason it was missed
+**Rule:** Concrete check to apply in future sessions
+```
 
 ---
 
-## Stop-Kriterium
-
-| Kategorie | Schwellwert |
-|-----------|-------------|
-| Ungeprüfte Annahmen | ≤ 1 |
-| Fehlende Gegenargumente | ≤ 1 |
-| Bestätigungsfehler | 0 |
-| Blinde Flecken | ≤ 1 |
-| Operative Schwäche | ≤ 1 |
-
-**STOP wenn:** Alle unter Schwellwert UND min. 2 Iterationen. Max. 4 Iterationen.
-
----
-
-## Revisionslog (Pflicht im finalen Output)
+## Iteration Log (required in final output)
 
 ```
-## Revisionslog
+## Revision Log
 
-Iteration 1: [N] Schwächen — [Hauptpunkte] → [Änderungen]
-Iteration 2: [N] Schwächen — [Hauptpunkte] → [Änderungen] / STOP
-Verbleibende Lücken: [ehrlich benennen]
+Iteration 1: [N] weaknesses — [main points] → [changes made]
+Iteration 2: [N] weaknesses — [main points] → [changes made] / STOP
+Remaining gaps: [name them honestly]
 ```
 
 ---
 
-## Tonalität
+## Tone
 
-- Direkt, keine Weichspüler
-- Konkret zitieren
-- Schwäche vs. akzeptable Lücke klar trennen
-- Unsicherheit explizit benennen
+- Direct, no hedging
+- Quote specifically
+- Distinguish weakness from acceptable gap
+- Name uncertainty explicitly
