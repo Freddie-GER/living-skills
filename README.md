@@ -13,6 +13,33 @@ Every session starts with what your team already knows — across tools, models,
 
 ---
 
+## This Is a Software 3.0 Repository
+
+> *"The hottest new programming language is English."*
+> — [Andrej Karpathy](https://x.com/karpathy/status/1617979122625712128), 2023
+
+This repository contains no code. Every file is plain Markdown.
+And yet it is fully executable — by any LLM that can read.
+
+Karpathy described three generations of software:
+
+- **Software 1.0** — explicit instructions written in code by humans
+- **Software 2.0** — neural networks where data is the program
+- **Software 3.0** — natural language as the program, executed by LLMs
+
+Living Skills is a Software 3.0 system. The `Skill.md` files are programs.
+The `living-checklist.md` files are state. `TEAM.md` is the runtime configuration.
+No compilation step. No language runtime. No vendor dependency.
+
+If your agent can read a file and run `git commit`, it can run this system.
+
+The key extension beyond Karpathy's [AutoResearch](https://github.com/karpathy/autoresearch)
+(where a human writes `program.md` and the model executes it): here, **the model
+writes back**. The programs improve through use. The system gets smarter every session —
+without a human editing the source.
+
+---
+
 ## Overview
 
 Built-in memory systems (Claude's memory, ChatGPT's memory) are unstructured, opaque, and effectively vendor-locked. When you switch tools, you start over. Old information contaminates current work, and it is difficult to inspect, correct, or selectively reuse.
@@ -165,6 +192,7 @@ Living Skills is a synthesis and extension of existing ideas:
 
 | Concept | Source / Origin | How it appears here | Note |
 |---------|----------------|---------------------|------|
+| Software 3.0 paradigm | [Karpathy, 2023](https://x.com/karpathy/status/1617979122625712128) | Markdown as executable program | Foundational framing |
 | Skill format | Anthropic Skills | Skill.md structured definitions | Direct inspiration |
 | External knowledge in files | Karpathy LLM Wiki | Markdown-based knowledge | Direct inspiration |
 | Iterative improvement | Karpathy Autoresearch | Learning through execution | High-level influence |
