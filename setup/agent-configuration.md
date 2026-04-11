@@ -89,11 +89,18 @@ Use this name in all Git commit messages.
 ## Repository
 The Living Skills repository is at: <absolute path>
 
+## Available skills
+
+| Path | Purpose |
+|------|---------|
+| `skills/<skill-a>/` | [what it's for] |
+| `skills/<skill-b>/` | [what it's for] |
+
 ## Before starting any task covered by a skill
 1. Run `git pull` in the repository directory
-2. Read `skills/<relevant-skill>/Skill.md`
-3. Read `skills/<relevant-skill>/living-checklist.md`
-4. Incorporate what you learn into how you approach the task
+2. Read `skills/<relevant-skill>/Skill.md` — understand the approach
+3. Read `skills/<relevant-skill>/living-checklist.md` — load accumulated learnings
+4. Apply checklist entries to the current task
 
 ## After completing a task
 Write new learnings to `skills/<relevant-skill>/living-checklist.md`:
@@ -109,6 +116,21 @@ git add skills/<skill>/living-checklist.md
 git commit -m "<Your-Instance-Name>: <skill> — session [date]"
 git push
 ```
+
+**Practical notes from production use:**
+
+- **`alwaysApply: true`** loads the rules into every Cursor session. This works well
+  when the repo is dedicated to Living Skills. If the repo also contains other projects,
+  consider using a `description`-based trigger instead — but note that Cursor's matching
+  can be unreliable, so `alwaysApply` is the safer choice.
+- **Explicit skill table** is better than auto-discovery in Cursor. Unlike Claude Code,
+  Cursor does not always explore the file tree proactively — listing skills explicitly
+  ensures they are found.
+- **Combine with an identity rule** if you have a separate `.mdc` for team/instance
+  identity. Use a description like `"Living Skills session rituals — supplements identity-rule.mdc"`
+  to signal that both rules work together.
+- **Caveat:** Global Cursor rules (`~/.cursor/rules/`) apply to all repos, including
+  private ones without team context. See [Known Gaps — Context-Dependent Tool Identity](../known-gaps.md#2026-04-11-context-dependent-tool-identity) for the open design problem.
 
 ---
 
