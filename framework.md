@@ -205,6 +205,28 @@ Iteration [N]: [N] open issues — [main problems] → [what to check next]
 Git is the single source of truth. All instances read from and write to the same repository.
 No instance holds state outside of Git (except local runtime variables).
 
+### Write Boundaries (Team Discipline)
+
+Each instance writes **only to its own designated area** — typically a `Team Memory/<instance>/`
+or equivalent folder. Other instances' memory areas are read-only.
+
+**Why this matters:** Each instance is responsible for documenting what *it* did, so others
+can read it. If Agent A writes into Agent B's memory, the authorship signal breaks down and
+the memory becomes unreliable. Even if a task seems to call for it, no agent writes for another.
+
+The canonical pattern:
+```
+Team Memory/
+  instance-a/    ← Instance A writes here; B and C read-only
+  instance-b/    ← Instance B writes here; A and C read-only
+  instance-c/    ← Instance C writes here; A and B read-only
+  shared/        ← All instances read; changes require explicit coordination
+  skills/        ← Skills are shared; living-checklist entries by any instance are welcome
+```
+
+Exception: `skills/` and `shared/` are collaborative — any instance may contribute.
+Living-checklist entries belong to the skill, not the instance.
+
 ### Commit Convention
 
 ```
