@@ -1,6 +1,6 @@
 # Living Skills — Framework Specification
 
-**Version:** 0.1
+**Version:** 0.2
 **Status:** Draft
 
 ---
