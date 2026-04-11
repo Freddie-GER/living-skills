@@ -84,6 +84,49 @@ find_doc_by_hpath() {
         python3 -c "import json,sys; rows=json.load(sys.stdin).get('data',[]); print(rows[0]['id'] if rows else '')" 2>/dev/null
 }
 
+# Aktuellen Markdown-Inhalt eines Siyuan-Dokuments holen
+get_siyuan_content() {
+    local doc_id="$1"
+    siyuan_api "export/exportMdContent" "{\"id\":\"$doc_id\"}" | \
+        python3 -c "import json,sys; print(json.load(sys.stdin).get('data',{}).get('content',''))" 2>/dev/null
+}
+
+# Compare Git and Siyuan content by word fingerprint.
+# Siyuan's Markdown export differs cosmetically (frontmatter, duplicate H1,
+# zero-width chars, table formatting, whitespace). Instead of normalizing
+# every edge case, we extract only the words and compare those.
+# This means: if the actual text content is the same, we skip the update —
+# preserving Siyuan's timestamp for human-edit detection.
+content_differs() {
+    local git_content="$1"
+    local siyuan_content="$2"
+
+    python3 -c "
+import sys, re
+
+def fingerprint(text):
+    # Strip YAML frontmatter
+    text = re.sub(r'^---\n.*?\n---\n*', '', text, count=1, flags=re.DOTALL)
+    # Remove duplicate H1 (Siyuan repeats title as first heading)
+    lines = text.strip().split('\n')
+    first_h1 = None; first_h1_idx = None
+    for i, line in enumerate(lines):
+        if line.strip() == '': continue
+        if line.startswith('# '):
+            if first_h1 is None: first_h1 = line.strip(); first_h1_idx = i
+            elif line.strip() == first_h1: lines = lines[:first_h1_idx] + lines[i:]; break
+            else: break
+        else: break
+    text = '\n'.join(lines)
+    # Extract only word characters — ignores all formatting differences
+    return ' '.join(re.findall(r'[\w]+', text, re.UNICODE))
+
+git = fingerprint(sys.argv[1])
+siyuan = fingerprint(sys.argv[2])
+sys.exit(0 if git != siyuan else 1)
+" "$git_content" "$siyuan_content"
+}
+
 # Doc-Inhalt komplett ersetzen
 update_doc() {
     local doc_id="$1"
@@ -102,6 +145,8 @@ update_doc() {
 }
 
 # Eine .md-Datei nach Siyuan synchronisieren
+# Key design: only write if content actually changed — this preserves Siyuan
+# timestamps on unchanged docs, enabling human-edit detection via timestamp comparison.
 sync_file() {
     local rel_path="$1"
     local abs_path="$REPO_DIR/$rel_path"
@@ -113,8 +158,16 @@ sync_file() {
     doc_id=$(find_doc_by_hpath "$hpath")
 
     if [[ -n "$doc_id" ]]; then
-        update_doc "$doc_id" "$content"
-        log "UPDATE: $hpath"
+        # Diff before write: fetch current Siyuan content and compare
+        local siyuan_content
+        siyuan_content=$(get_siyuan_content "$doc_id")
+
+        if content_differs "$content" "$siyuan_content"; then
+            update_doc "$doc_id" "$content"
+            log "UPDATE: $hpath"
+        else
+            log "SKIP (unchanged): $hpath"
+        fi
     else
         escaped=$(python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$content")
         result=$(siyuan_api "filetree/createDocWithMd" \

@@ -7,29 +7,39 @@ Do not implement without thinking through the implications first.
 
 ## [2026-04-11] Human-Readable Layer as Two-Way Channel
 
-**Status:** Partially solved for Siyuan — open for other tools
+**Status:** Solved for Siyuan (with known limitation) — open for other tools
 
 **Problem:** The sync between Git and a human-readable knowledge base (Siyuan, Obsidian, Notion)
-is currently one-directional:
+was one-directional: agents write to Git, sync pushes to the knowledge base, but human
+edits in the knowledge base never flow back to agents.
+
+**Solution (Siyuan):** Two mechanisms working together:
+
+1. **Diff-before-write sync** (`sync-to-siyuan.sh`): Only updates documents whose content
+   actually changed (word fingerprint comparison). Unchanged documents keep their Siyuan
+   timestamp. This is the key enabler — without it, every sync refreshes all timestamps
+   and human edits become invisible.
+
+2. **Human edit detection** (`check-siyuan-edits.sh`): At session start, compares Siyuan
+   document timestamps against the last Git commit timestamp (+ 2-minute buffer for sync
+   delay). Any document with a newer timestamp was edited by a human. The agent reads the
+   edits, incorporates them into the session, and the normal session-end flow (git push →
+   sync) writes the merged result back to both Git and Siyuan.
 
 ```
-Git ──(sync script)──→ Knowledge Base    ✓  Agents write → Human reads
-Git ←────────────────  Knowledge Base    ✗  Human writes → Agents don't see it
+Session start:  git pull → check-siyuan-edits.sh → agent sees human edits
+Session work:   agent incorporates human input into its work
+Session end:    git push → sync-to-siyuan.sh → complete state in both systems
 ```
 
-Everything agents write to Git lands automatically in the knowledge base (via post-merge hook).
-But when a human adds notes, corrections, or ideas directly in the knowledge base,
-that does not flow back to Git — and agents never see it.
+**Known limitation:** ~24% of documents have Markdown roundtrip differences (Siyuan's
+parser changes formatting on export). These get rewritten every sync and show as false
+positives in the edit check. The affected documents are consistent and predictable.
+See `Infrastructure/skills/siyuan/Skill.md` for details.
 
-**Known approaches:**
-- Dedicated "inbox" notebook/page in the knowledge base that agents check at session start via API
-- Reverse-sync script (knowledge base export → Git commit)
-- Agent queries knowledge base via MCP/API as part of session-start ritual
-
-**Siyuan:** MCP access (`siyuan-mcp`) makes the inbox approach technically feasible.
-See `Infrastructure/skills/siyuan/` for setup guidance.
-
-**Notion / Obsidian / Logseq:** Same problem, different APIs. Contributions welcome.
+**Notion / Obsidian / Logseq:** Same problem, different APIs. The same timestamp-based
+approach should work if the knowledge base exposes document modification timestamps
+and supports content comparison before write. Contributions welcome.
 
 ---
 

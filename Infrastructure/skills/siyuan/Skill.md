@@ -19,17 +19,24 @@ human navigation, search, and annotation.
 ```
 Git repository (authoritative)
        │
-       │  Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
-       │  (run manually after git push — part of session-end ritual)
+       │  sync-to-siyuan.sh (session-end, after git push)
+       │  Only writes docs whose content actually changed (diff-before-write).
+       │  Unchanged docs keep their Siyuan timestamp.
        ▼
 Siyuan Knowledge Base (human-readable view)
        │
-       │  Human reads, annotates, adds notes
+       │  Human reads, annotates, adds notes → Siyuan timestamp updates
+       │
+       │  check-siyuan-edits.sh (session-start)
+       │  Compares Siyuan timestamps against last Git commit.
+       │  Any doc with a newer timestamp = human edit.
        ▼
-  [gap: not yet flowing back to Git — see known-gaps.md]
+Agent reads human edits at session start → incorporates into work
 ```
 
-Git is the source of truth. Siyuan is the reading interface.
+Git is the source of truth. Siyuan is the reading and annotation interface.
+Human edits in Siyuan are detected at session start and flow into the agent's work.
+At session end, the agent's output goes through Git → Siyuan as usual.
 
 **Important:** The sync script runs after every successful `git push` — not via a daemon,
 not via a git hook. The agent is responsible. This ensures the sync always reflects
@@ -104,17 +111,28 @@ curl -s http://<host>:6806/api/system/version \
 git push && bash Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
 ```
 
-Check the output — every `.md` file should show `UPDATE` or `CREATE`.
+Check the output — files should show `UPDATE`, `CREATE`, or `SKIP (unchanged)`.
 Then open Siyuan and verify the notebook structure matches your repo.
+
+**Note:** The sync uses diff-before-write — it compares a word fingerprint of the Git
+content against the Siyuan export and only writes if content actually changed. This
+preserves Siyuan timestamps on unchanged docs, which is essential for human-edit detection.
 
 ---
 
-### Step 5: Add Sync to Session-End Ritual
+### Step 5: Add to Session Rituals
 
-Add this to your `TEAM.md` (or equivalent agent config):
+Add these to your `TEAM.md` (or equivalent agent config):
 
+**Session start:**
 ```bash
-# Session end — always:
+git pull --rebase
+bash Infrastructure/skills/siyuan/scripts/check-siyuan-edits.sh
+# Review any human edits before starting work
+```
+
+**Session end:**
+```bash
 git add <changed files>
 git commit -m "<Instance>: <what> [YYYY-MM-DD]"
 git push && bash Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
@@ -162,9 +180,20 @@ Restart Claude Code for MCP tools to activate.
 
 ---
 
+## Known Limitations
+
+**Markdown roundtrip differences:** Siyuan's Markdown parser transforms some formatting
+on export (e.g., table whitespace, code block markers, special characters). For documents
+where the roundtrip changes the word content, the sync will rewrite them every time —
+giving them a fresh timestamp and causing false positives in the human-edit check.
+
+In production testing: ~76% of docs sync cleanly (SKIP when unchanged), ~24% have
+roundtrip differences and get rewritten every sync. The affected docs are predictable
+and consistent — they are the same every time, so agents can learn to recognize them.
+
 ## Open TODOs
 
-- [ ] Reverse sync: human edits in Siyuan → Git commit (see known-gaps.md)
+- [ ] Reduce roundtrip differences (investigate Siyuan export API options)
 - [ ] Notion equivalent of this skill
 - [ ] Obsidian equivalent of this skill
 
