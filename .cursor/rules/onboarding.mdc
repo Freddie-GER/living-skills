@@ -154,8 +154,12 @@ Your global identity file (`~/.cursor/rules/identity.mdc`) is loaded automatical
 
 At session start:
 1. Run `git pull --rebase` and check `git log --oneline -5`
-2. Read `living-checklist.md` for any skill you're about to use
-3. Proceed with the task
+2. **Check for new teammates** — run `ls "Team Memory/"` and compare with the teammates listed in your `~/.cursor/rules/identity.mdc`. If a new folder appears that you don't know yet:
+   - Note who joined the team
+   - Add them to your identity file under "Teammates (read-only)"
+   - Optionally: tell the user "I see a new teammate: `<name>` — added to my config"
+3. Read `living-checklist.md` for any skill you're about to use
+4. Proceed with the task
 
 ---
 
