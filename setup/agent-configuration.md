@@ -194,11 +194,14 @@ See [sync-setup.md](sync-setup.md) for the full sync configuration.
 
 | Environment | Config file | Status |
 |-------------|-------------|--------|
-| Claude Code | `CLAUDE.md` | ✅ Tested, works in production |
-| Cursor | `.cursor/rules/*.mdc` | 🔬 Untested — config format above is best-guess |
-| Generic system prompt | depends on tool | 🔬 Untested — adapt as needed |
+| Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works in production |
+| Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Configuration in place |
+| Cursor | `.cursor/rules/*.mdc` | ✅ Configuration in place |
 | Aider | `.aider.conf.yml` or system prompt | 🔬 Untested |
 | Open WebUI | System prompt field | 🔬 Untested |
+
+**Note:** `CLAUDE.md` (Claude Code) and `AGENTS.md` (Codex) are both symlinks to `TEAM.md`.
+This is the recommended pattern — maintain one file, all tools read the same source.
 
 If you get it working in an environment not listed here, please
 [contribute a configuration example](../CONTRIBUTING.md).

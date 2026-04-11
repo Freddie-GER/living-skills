@@ -1,4 +1,9 @@
-# Living Skills — Claude Code Configuration
+# Living Skills — Team Configuration
+
+> This file is the single source of truth for all AI tools in this repository.
+> `CLAUDE.md` (Claude Code) and `AGENTS.md` (Codex) are symlinks pointing here.
+> Cursor reads `.cursor/rules/living-skills.mdc` separately.
+> Edit only this file — all tools pick up the changes automatically.
 
 ## Who I am
 
