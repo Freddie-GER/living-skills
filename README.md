@@ -248,10 +248,15 @@ Any agent with file access can participate. Git handles versioning, merging, and
 
 ## Status
 
-**Tested in production:** Claude Code (multi-machine, two instances sharing one skill pool).
+**Tested in production:** Claude Code (multi-machine), Cursor.
 
-**Configuration files included for:** Claude Code (`CLAUDE.md`), Codex (`AGENTS.md`), Cursor (`.cursor/rules/`).
-`CLAUDE.md` and `AGENTS.md` are symlinks to `TEAM.md` — one source, read by all tools.
+**Tool configuration:**
+- `TEAM.md` — single source of truth for all tools
+- `CLAUDE.md` — symlink to `TEAM.md`, read by Claude Code
+- `AGENTS.md` — symlink to `TEAM.md`, read by Codex
+- `.cursor/rules/` — Cursor rules (separate format, same content)
+
+One file to maintain. Every tool picks it up automatically.
 
 **Untested but designed for:** Aider, Open WebUI, local models, any agent with filesystem + Git access.
 

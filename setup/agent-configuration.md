@@ -196,7 +196,7 @@ See [sync-setup.md](sync-setup.md) for the full sync configuration.
 |-------------|-------------|--------|
 | Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works in production |
 | Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Configuration in place |
-| Cursor | `.cursor/rules/*.mdc` | ✅ Configuration in place |
+| Cursor | `.cursor/rules/*.mdc` | ✅ Tested, works in production |
 | Aider | `.aider.conf.yml` or system prompt | 🔬 Untested |
 | Open WebUI | System prompt field | 🔬 Untested |
 
