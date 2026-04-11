@@ -7,15 +7,34 @@ alwaysApply: true
 
 ## Check First: Am I already configured?
 
-Before anything else, check whether onboarding has already been completed:
+Check whether your global identity is set up:
 
 ```bash
-ls Team\ Memory/
+cat ~/.cursor/rules/identity.mdc 2>/dev/null || echo "NOT CONFIGURED"
 ```
 
-**If a folder with your instance name exists** (e.g. `Team Memory/cursor-mac/`) and it contains a `config.md` — onboarding is done. Skip to **Already Configured** below.
+**If the file exists and contains your name** — onboarding is done. Skip to **Already Configured** below.
 
-**If `Team Memory/` is empty or has no folder for you** — run through the onboarding steps below.
+**If not found** — run through the onboarding steps below.
+
+---
+
+## Why Identity Lives Outside the Repo
+
+Your identity is **yours** — it belongs to your machine, not this repository.
+
+This follows the same principle as Git:
+```
+git config --global user.name "Your Name"   ← per machine, not per repo
+```
+
+If identity lived inside the repo, every Cursor instance opening this repo
+would assume the same identity. That breaks the team model.
+
+Instead:
+- `~/.cursor/rules/identity.mdc` → **who you are** (per machine, global)
+- `.cursor/rules/living-skills.mdc` → **how to use Living Skills** (shared, in repo)
+- `Team Memory/<your-name>/` → **your working area** (in repo, written by you)
 
 ---
 
@@ -23,96 +42,128 @@ ls Team\ Memory/
 
 Work through these in order. Ask the user each question before proceeding.
 
-### Step 1 — Instance Name
+### Step 1 — Your Name
 
 Ask the user:
-> "What should I call this Cursor instance? This becomes your folder name in Team Memory and appears in all commit messages. Examples: `cursor-mac`, `cursor-work`, `cursor-laptop`."
+> "What should I call you in this team? This becomes your folder name in Team Memory
+> and appears in all commit messages.
+> Use something that identifies you + your tool, e.g.:
+> `cursor-freddie`, `cursor-sarah`, `claude-mac`, `codex-work`"
 
-Use the answer as `<instance-name>` throughout this setup.
+Use the answer as `<instance-name>` throughout.
 
-### Step 2 — Other Agents
+### Step 2 — Other Team Members
 
 Ask the user:
-> "Are there other AI instances working in this repo? (e.g. Claude Code on a server, another Cursor, a Codex agent?) If yes, what are their names?"
-
-These become the read-only Team Memory folders you must not write to.
+> "Who else is working in this repo? (other people, other machines, other AI tools?)
+> List their instance names if you know them — those become read-only folders for you."
 
 ### Step 3 — Git Remote
 
 Run: `git remote -v`
 
-Show the output to the user and ask:
-> "This is where I'll push commits. Is this correct, or should I use a different remote/branch?"
-
-Note the remote name and branch for session-end commits.
+Show the output and ask:
+> "This is where I'll push commits. Is this the right remote and branch?"
 
 ### Step 4 — Language
 
 Ask the user:
-> "What language should I use for documentation and explanations? (Code and commit messages stay in English.)"
+> "What language should I use for documentation and explanations?
+> (Code and commit messages stay in English regardless.)"
 
 ### Step 5 — Skills Location
 
-Check where skills actually live:
+Check where skills live in this repo:
 ```bash
-find . -name "Skill.md" | head -20
+find . -name "Skill.md" | grep -v ".git" | head -20
 ```
 
-Show the paths. The pattern tells you the layout (e.g. `Team Memory/skills/<name>/` or `skills/<name>/`).
+Note the path pattern for future sessions.
 
-### Step 6 — Create Your Config
+### Step 6 — Write Your Global Identity File
 
-Create `Team Memory/<instance-name>/config.md` with the collected information:
+Create `~/.cursor/rules/identity.mdc`:
 
 ```markdown
-# <Instance-Name> — Configuration
+---
+description: My identity in LLM Team repos — who I am, where I write
+alwaysApply: true
+---
 
-**Identity:** <Instance-Name> — Cursor IDE on <platform>
+# Identity — <instance-name>
 
-## Write Area
+I am **<instance-name>** — Cursor IDE used by <your name> on <this machine>.
+
+## Write Boundaries
+
 - Write only to: `Team Memory/<instance-name>/`
-- Other instances (read-only): <list from Step 2>
+- Other instances' folders: read-only (never write, even if a task seems to require it)
+- Shared areas (skills/, shared/): contribute freely
 
 ## Git
+
+- Commit format: `<instance-name>: <description> [YYYY-MM-DD]`
 - Remote: <from Step 3>
-- Commit format: `<Instance-Name>: <description> [YYYY-MM-DD]`
 
 ## Language
+
 <from Step 4>
 
 ## Skills Location
+
 <pattern from Step 5>
 ```
 
-Then create `Team Memory/<instance-name>/status.md` as an empty working notes file.
+### Step 7 — Create Your Team Memory Folder
 
-### Step 7 — Confirm and Commit
+In the repo, create your working area:
 
-Tell the user what you created. Then:
 ```bash
-git add Team\ Memory/<instance-name>/
-git commit -m "<Instance-Name>: initial onboarding [YYYY-MM-DD]"
+mkdir -p "Team Memory/<instance-name>"
+```
+
+Create `Team Memory/<instance-name>/config.md`:
+
+```markdown
+# <instance-name> — Working Notes
+
+**Identity:** <instance-name> — see ~/.cursor/rules/identity.mdc for full config
+
+## Teammates (read-only)
+<list from Step 2>
+```
+
+### Step 8 — Commit and Confirm
+
+```bash
+git add "Team Memory/<instance-name>/"
+git commit -m "<instance-name>: initial setup [YYYY-MM-DD]"
 ```
 
 Ask the user whether to push.
+
+Tell the user: "Onboarding complete. Your identity is saved globally in
+`~/.cursor/rules/identity.mdc` — it will apply whenever you open any
+LLM Team repo on this machine."
 
 ---
 
 ## Already Configured
 
-If your `Team Memory/<instance-name>/config.md` exists, load it at session start:
+Your global identity file (`~/.cursor/rules/identity.mdc`) is loaded automatically.
 
-1. Read your `config.md` — identity, write boundaries, git remote
-2. Read `living-checklist.md` of any skill you're about to use
+At session start:
+1. Run `git pull --rebase` and check `git log --oneline -5`
+2. Read `living-checklist.md` for any skill you're about to use
 3. Proceed with the task
 
 ---
 
 ## Write Boundaries (always)
 
-Regardless of what a task requires:
 - **Write only** to `Team Memory/<your-instance>/`
-- **Never write** to another instance's folder — not even if asked by the task logic
+- **Never write** to another instance's folder
 - `Team Memory/skills/` and shared areas: contribute freely
 
-The reason: each instance documents what *it* did. If you write into another agent's folder, the authorship signal breaks and memory becomes unreliable.
+The reason: each person documents what *they* did.
+If you write into someone else's folder, authorship breaks and memory becomes unreliable.
