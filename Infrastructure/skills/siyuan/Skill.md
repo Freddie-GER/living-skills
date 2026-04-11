@@ -19,7 +19,8 @@ human navigation, search, and annotation.
 ```
 Git repository (authoritative)
        │
-       │  sync-to-siyuan.sh (post-merge hook or manual)
+       │  Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
+       │  (run manually after git push — part of session-end ritual)
        ▼
 Siyuan Knowledge Base (human-readable view)
        │
@@ -30,11 +31,15 @@ Siyuan Knowledge Base (human-readable view)
 
 Git is the source of truth. Siyuan is the reading interface.
 
+**Important:** The sync script runs after every successful `git push` — not via a daemon,
+not via a git hook. The agent is responsible. This ensures the sync always reflects
+the complete, merged state of the repository.
+
 ---
 
 ## Setup — Interactive Onboarding
 
-When setting up Siyuan for a new instance, work through these questions with the user:
+Work through these steps with the user when setting up Siyuan for a new instance:
 
 ### Step 1: Deployment
 
@@ -50,12 +55,6 @@ Ask the user:
 - Note the URL provided by the hosting service
 - Retrieve API token from account settings
 
-Record in your `Team Memory/<instance>/config.md`:
-```
-SIYUAN_URL=http://<host>:6806
-SIYUAN_TOKEN=<your-token>
-```
-
 ---
 
 ### Step 2: Notebook Structure
@@ -64,31 +63,31 @@ Ask the user:
 > "Do you want one notebook per domain (Infrastructure, Projects, Team Memory)
 > or one shared notebook for everything?"
 
-**Recommended:** One notebook called `Homelab` or your team name.
+**Recommended:** One notebook named after your team or project.
 Subdirectory structure mirrors the Git repo:
 ```
-Homelab/
+<NotebookName>/
   Infrastructure/
   Projects/
   Team Memory/
 ```
 
-Note the Notebook ID from Siyuan's API or URL — you'll need it for the sync script.
+Note the Notebook ID — you will need it in the next step.
+Find it via: Siyuan → Settings → About → Notebook ID, or from the URL when viewing the notebook.
 
 ---
 
-### Step 3: Git → Siyuan Sync
+### Step 3: Create the .env File
 
-The sync script (`sync-to-siyuan.sh` in the repo root) pushes all `.md` files to Siyuan
-via its HTTP API. It runs automatically as a `post-merge` hook after `git pull`.
+The sync script reads credentials from a `.env` file at the repo root.
+This file is excluded from Git (listed in `.gitignore`) — each instance creates it locally.
 
-Configure environment variables:
+Create `<repo-root>/.env`:
 ```bash
-export SIYUAN_URL="http://<host>:6806"
-export SIYUAN_TOKEN="<your-token>"
+SIYUAN_URL="http://<host>:6806"
+SIYUAN_TOKEN="<your-token>"
+SIYUAN_NOTEBOOK_ID="<notebook-id>"
 ```
-
-Or store them in a `.env` file (excluded from Git via `.gitignore`).
 
 **Test the connection:**
 ```bash
@@ -97,19 +96,40 @@ curl -s http://<host>:6806/api/system/version \
 # Should return: {"code":0,"data":{"ver":"..."}}
 ```
 
-**Run sync manually:**
+---
+
+### Step 4: Run the First Sync
+
 ```bash
-bash sync-to-siyuan.sh
+git push && bash Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
 ```
+
+Check the output — every `.md` file should show `UPDATE` or `CREATE`.
+Then open Siyuan and verify the notebook structure matches your repo.
 
 ---
 
-### Step 4: MCP Access (for agents)
+### Step 5: Add Sync to Session-End Ritual
 
-MCP (Model Context Protocol) lets agents query Siyuan directly during sessions —
-useful for the "inbox" pattern where humans leave notes for agents.
+Add this to your `TEAM.md` (or equivalent agent config):
 
-**Install:** `siyuan-mcp` (search npm registry for current package)
+```bash
+# Session end — always:
+git add <changed files>
+git commit -m "<Instance>: <what> [YYYY-MM-DD]"
+git push && bash Infrastructure/skills/siyuan/scripts/sync-to-siyuan.sh
+```
+
+The `&&` ensures Siyuan sync only runs after a successful push.
+The script syncs ALL `.md` files — whoever pushes last writes the complete state to Siyuan.
+
+---
+
+### Step 6: MCP Access (optional, for agents)
+
+MCP lets agents query Siyuan directly — useful for reading human annotations at session start.
+
+**Install:** `siyuan-mcp` (check npm for current version)
 
 **Claude Code config** (`~/.claude.json`):
 ```json
@@ -133,12 +153,12 @@ Restart Claude Code for MCP tools to activate.
 
 ## Proven Approaches
 
-- Always test the API connection before setting up the sync hook
-- Use the notebook ID from the API, not the display name — display names can change
-- The sync script is append-safe: it updates existing documents by replacing content,
-  never creates duplicates as long as the HPath (hierarchical path) stays stable
-- If a document disappears from Siyuan after sync: check that the `.md` file's
-  first `# H1` heading hasn't changed — the HPath is derived from it
+- Always test the API connection before running the sync script
+- Use the Notebook ID, not the display name — display names can change, IDs don't
+- The sync script derives the Siyuan HPath from the first `# H1` heading in each file.
+  If a heading changes, Siyuan creates a new document instead of updating the existing one.
+- Run sync only after `git push` — never before. A failed push means another instance
+  may have newer changes; syncing before rebasing would push a stale state to Siyuan.
 
 ---
 
@@ -147,7 +167,6 @@ Restart Claude Code for MCP tools to activate.
 - [ ] Reverse sync: human edits in Siyuan → Git commit (see known-gaps.md)
 - [ ] Notion equivalent of this skill
 - [ ] Obsidian equivalent of this skill
-- [ ] [Add your own TODOs here]
 
 ---
 
@@ -155,3 +174,4 @@ Restart Claude Code for MCP tools to activate.
 
 After each session: write new learnings, configuration patterns, API quirks,
 or sync edge cases to `living-checklist.md`.
+Commit, push, and sync to Siyuan.
