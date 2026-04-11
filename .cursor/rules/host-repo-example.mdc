@@ -1,0 +1,54 @@
+---
+description: <Your Repo Name> — Cursor identity, session rituals, team memory boundaries
+alwaysApply: true
+---
+
+# <Your Repo Name> — Cursor Rules
+
+> **This is a template.** Copy this file to your repository's `.cursor/rules/` directory
+> and replace all `<placeholder>` values with your actual setup.
+> Rename it to something like `my-project-cursor.mdc`.
+
+## Identity
+
+You are working in this repo as **<Your Cursor Instance Name>** (Cursor IDE on <Mac/Linux/Windows>).
+Teammates: **<Instance-B>** and **<Instance-C>** (e.g. Claude Code, another Cursor agent).
+Shared remote: `<your-remote-name>` (see `git remote -v`).
+
+## Session Start
+
+When a session involves this repo's documentation or team memory:
+
+1. Pull latest: `git pull --rebase` in the workspace root, then `git log --oneline -5`.
+2. Load context: `CLAUDE.md` (or your shared context file), then your own `Team Memory/<instance>/status.md`.
+
+## Write Boundaries (Team Discipline)
+
+- **Your own area:** write only to `Team Memory/<your-instance>/` (e.g. `status.md`, `MEMORY.md`).
+- **Other instances' folders** (`<instance-b>/`, `<instance-c>/`): read-only — do not write, even if a task seems to require it.
+- **Shared areas** (`Infrastructure/`, `Projects/`, `Team Memory/skills/`): write as the task requires; no unnecessary refactoring.
+
+## Language / Style
+
+<Set language and tone expectations here. Example: "Markdown and explanations in this repo: English, clear and direct.">
+
+## Living Skills (when relevant)
+
+Skills in this repo live at: `Team Memory/skills/<name>/` and `<domain-area>/skills/<name>/`.
+
+Session ritual:
+1. Read `Skill.md` + `living-checklist.md` before starting
+2. After the session: extend the checklist with new learnings and commit
+
+## Session End
+
+After meaningful changes:
+
+1. Check `git status`.
+2. Commit message: `<Your-Instance-Name>: <short description> [YYYY-MM-DD]`
+3. Push if needed: `git push origin main` (or your branch).
+
+## Scope
+
+- Your **shared context file** (CLAUDE.md or equivalent) is the source of truth for repo structure and paths — do not duplicate it here, align with teammates when there are discrepancies.
+- **Global Cursor user rules** stay outside this repo; this file applies **only in this project**.
