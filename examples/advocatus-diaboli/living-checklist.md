@@ -4,44 +4,40 @@
 
 ---
 
-### [YYYY-MM-DD] — [Analysis type]
+## Entry Format
+
+```
+### [YYYY-MM-DD] — [Analysis type / domain]
 **Learning:** What pattern was found / what failed
 **Why it matters:** Structural reason it was missed
 **Rule:** Concrete check to apply in future sessions
+```
 
 ---
 
 ## Entries
 
-### 2026-04-10 — Political Strategy Analysis
+### 2026-01-15 — Competitive Market Analysis
 
-**Learning:** Historical narratives adopted as facts without verification
-**Why it matters:** With established political actors, large bodies of published material exist — first-pass output aggregates this material without questioning whether the narratives themselves are accurate
-**Rule:** For every historical causal claim, ask: "Who says this, and who would disagree?"
-
-**Learning:** Opportunity spaces dismissed as "saturated" without checking whether saturation is real or perceived
-**Why it matters:** Competitive analysis looks at existing actors, not at unclaimed combinations
-**Rule:** For every "saturated space": Is there a combination of two topics that no actor credibly occupies?
-
-**Learning:** Audience analyses conflate self-image and external perception without separation
-**Why it matters:** "Party X is perceived as a clientelist party" is external perception — but is treated as structural fact
-**Rule:** Always separate: What is self-image, what is external perception, what is verifiable reality?
+**Learning:** Claims about market saturation were accepted without verifying whether saturation is real or merely perceived
+**Why it matters:** Competitive analysis scans existing actors, not unclaimed combinations — "everyone is doing X" rarely holds when you check specific sub-niches
+**Rule:** For every "saturated space": name two actors who credibly occupy the *combination* of the relevant dimensions. If you cannot, saturation is assumed, not demonstrated.
 
 ---
 
-### 2026-04-11 — Meta: Living Skills Framework Self-Onboarding (Cursor)
+### 2026-02-03 — Stakeholder Strategy Document
 
-**Learning:** "Framework + docs = complete self-onboarding" is false — team charter (who writes where) lives outside the Living Skills spec, e.g. only in the host repo's CLAUDE.md or equivalent
-**Why it matters:** Living Skills addresses Git/rituals/skill paths, not organization-specific identity and folder rules of the host repo
-**Rule:** Before claiming "self-onboarding possible", ask: Which rules are defined **in the host repo** (Team Memory, CLAUDE.md) vs. **in the framework** itself?
+**Learning:** Audience analysis conflated self-image, external perception, and verifiable fact without separating them
+**Why it matters:** "Group X is perceived as Y" is external perception — treating it as structural fact skips the question of whether the perception is accurate or contested
+**Rule:** For every audience or stakeholder claim, explicitly label: self-image / external perception / verifiable reality. Review each category separately.
 
-**Learning:** Tutorial paths (`skills/<name>/`) diverge from real-world layouts (e.g. `Team Memory/skills/<name>/`) — a new instance can read the wrong relative path
-**Why it matters:** Framework spec and templates assume `skills/` at repo root; forks with different structures are not marked as deviations
-**Rule:** At onboarding step one, verify physically where `Skill.md` lives (via `find` or README) — do not assume from framework examples
+---
 
-**Learning:** `setup/agent-configuration.md` marks Cursor config as **untested** — yet it was used as-is for a production self-onboarding
-**Why it matters:** Assumed parity between Claude Code and Cursor without validating differences (sandboxing, `git push` access, hook behavior)
-**Rule:** With Cursor: explicitly verify — unsandboxed shell, `git push` once manually confirmed, rule file set to `alwaysApply` vs. context-specific
+### 2026-03-20 — Technical Architecture Proposal
+
+**Learning:** First-pass review accepted the document's own framing of the problem space
+**Why it matters:** Adversarial review that starts from the document's premises cannot surface whether the premises themselves are wrong
+**Rule:** Before reviewing content, extract and separately evaluate the assumptions the document treats as given. At least one round of iteration must challenge the framing, not just the conclusions.
 
 ---
 
