@@ -58,11 +58,12 @@ Team Memory gives every AI instance a structured home for project knowledge:
 
 ```
 Team Memory/
-  <instance>/
-    status.md    ← current work, open items, recent decisions
-    config.md    ← instance identity, paths, credentials
-  shared/        ← human-contributed knowledge: user stories, stakeholder needs,
-                    workshop results, decisions from meetings
+  <instance>/        ← one folder per agent, created during onboarding
+    status.md        ← current work, open items, recent decisions
+    config.md        ← instance identity, paths, credentials
+  shared/            ← human-contributed knowledge: user stories, stakeholder needs,
+                        workshop results, decisions from meetings
+  skills/            ← behavioral skills shared across all instances
 ```
 
 Humans write here too. A product manager adds user story results after a workshop.
@@ -177,22 +178,35 @@ Living Skills is a synthesis and extension of existing ideas:
 
 ## Core Architecture
 
-### Skill Structure
+### Repository Structure
 
 ```
-skills/<skill-name>/
-├── Skill.md
-├── living-checklist.md
-└── revisionslog.md
+Infrastructure/           ← domain skills for systems and tools
+  skills/
+    <skill-name>/
+      Skill.md
+      living-checklist.md
+      revisionslog.md
+Projects/                 ← domain skills for ongoing projects
+  <project-name>/
+    skills/
+      <skill-name>/
+Team Memory/              ← instance memory and behavioral skills
+  <instance-name>/        ← created by each agent during onboarding
+    status.md
+    config.md
+  shared/                 ← human-contributed context
+  skills/                 ← behavioral skills (methodologies, workflows)
+    <skill-name>/
 ```
 
 ### Two Skill Types
 
-**Type A — Behavioral Skill**
-Defines how to approach problems.
+**Type A — Behavioral Skill** → lives in `Team Memory/skills/`
+Defines how to approach problems — transferable across domains.
 
-**Type B — Domain Skill**
-Defines what works in a specific system.
+**Type B — Domain Skill** → lives in `Infrastructure/skills/` or `Projects/<name>/skills/`
+Defines what works in a specific system — built through experience.
 
 ### Session Ritual
 
