@@ -1,0 +1,118 @@
+---
+description: Living Skills self-onboarding — run this when setting up for the first time or when no instance config exists yet
+alwaysApply: true
+---
+
+# Living Skills — Agent Onboarding
+
+## Check First: Am I already configured?
+
+Before anything else, check whether onboarding has already been completed:
+
+```bash
+ls Team\ Memory/
+```
+
+**If a folder with your instance name exists** (e.g. `Team Memory/cursor-mac/`) and it contains a `config.md` — onboarding is done. Skip to **Already Configured** below.
+
+**If `Team Memory/` is empty or has no folder for you** — run through the onboarding steps below.
+
+---
+
+## Onboarding Steps (first-time setup)
+
+Work through these in order. Ask the user each question before proceeding.
+
+### Step 1 — Instance Name
+
+Ask the user:
+> "What should I call this Cursor instance? This becomes your folder name in Team Memory and appears in all commit messages. Examples: `cursor-mac`, `cursor-work`, `cursor-laptop`."
+
+Use the answer as `<instance-name>` throughout this setup.
+
+### Step 2 — Other Agents
+
+Ask the user:
+> "Are there other AI instances working in this repo? (e.g. Claude Code on a server, another Cursor, a Codex agent?) If yes, what are their names?"
+
+These become the read-only Team Memory folders you must not write to.
+
+### Step 3 — Git Remote
+
+Run: `git remote -v`
+
+Show the output to the user and ask:
+> "This is where I'll push commits. Is this correct, or should I use a different remote/branch?"
+
+Note the remote name and branch for session-end commits.
+
+### Step 4 — Language
+
+Ask the user:
+> "What language should I use for documentation and explanations? (Code and commit messages stay in English.)"
+
+### Step 5 — Skills Location
+
+Check where skills actually live:
+```bash
+find . -name "Skill.md" | head -20
+```
+
+Show the paths. The pattern tells you the layout (e.g. `Team Memory/skills/<name>/` or `skills/<name>/`).
+
+### Step 6 — Create Your Config
+
+Create `Team Memory/<instance-name>/config.md` with the collected information:
+
+```markdown
+# <Instance-Name> — Configuration
+
+**Identity:** <Instance-Name> — Cursor IDE on <platform>
+
+## Write Area
+- Write only to: `Team Memory/<instance-name>/`
+- Other instances (read-only): <list from Step 2>
+
+## Git
+- Remote: <from Step 3>
+- Commit format: `<Instance-Name>: <description> [YYYY-MM-DD]`
+
+## Language
+<from Step 4>
+
+## Skills Location
+<pattern from Step 5>
+```
+
+Then create `Team Memory/<instance-name>/status.md` as an empty working notes file.
+
+### Step 7 — Confirm and Commit
+
+Tell the user what you created. Then:
+```bash
+git add Team\ Memory/<instance-name>/
+git commit -m "<Instance-Name>: initial onboarding [YYYY-MM-DD]"
+```
+
+Ask the user whether to push.
+
+---
+
+## Already Configured
+
+If your `Team Memory/<instance-name>/config.md` exists, load it at session start:
+
+1. Read your `config.md` — identity, write boundaries, git remote
+2. Read `living-checklist.md` of any skill you're about to use
+3. Proceed with the task
+
+---
+
+## Write Boundaries (always)
+
+Regardless of what a task requires:
+- **Write only** to `Team Memory/<your-instance>/`
+- **Never write** to another instance's folder — not even if asked by the task logic
+- `Team Memory/skills/` and shared areas: contribute freely
+
+The reason: each instance documents what *it* did. If you write into another agent's folder, the authorship signal breaks and memory becomes unreliable.
