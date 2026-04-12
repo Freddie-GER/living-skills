@@ -217,7 +217,7 @@ See [sync-setup.md](sync-setup.md) for the full sync configuration.
 | Environment | Config file | Status |
 |-------------|-------------|--------|
 | Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works reliably in production |
-| Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Configuration in place |
+| Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Tested in production in a shared multi-instance setup |
 | Cursor | `.cursor/rules/*.mdc` | ⚠️ Tested — rules load, but session rituals not reliably executed (see below) |
 | Generic system prompt | depends on tool | 🔬 Untested — adapt as needed |
 | Aider | `.aider.conf.yml` or system prompt | 🔬 Untested |

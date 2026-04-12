@@ -365,7 +365,7 @@ Any agent with file access can participate. Git handles versioning, merging, and
 
 ## Status
 
-**Tested in production:** Claude Code (multi-machine), Cursor.
+**Tested in production:** Claude Code (multi-machine), Codex, Cursor.
 
 **Tool configuration:**
 - `TEAM.md` — single source of truth for all tools
@@ -378,6 +378,10 @@ One file to maintain. Every tool picks it up automatically.
 **Claude Code:** Fully tested. Session rituals (pull before, commit after) are enforced
 via `CLAUDE.md` hooks — Claude Code cannot skip them without violating its own context.
 Works reliably across sessions and instances.
+
+**Codex:** Tested in production via `AGENTS.md` → `TEAM.md` in a shared multi-instance
+team setup. Reads the same team charter as Claude Code and successfully participates in
+the same Git-based workflow and Living Skills rituals.
 
 **Cursor:** Tested. Rules load correctly via `.cursor/rules/*.mdc`. However, Cursor
 has no session lifecycle hooks, so pull/commit rituals are not reliably enforced.
