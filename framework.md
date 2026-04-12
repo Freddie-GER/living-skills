@@ -253,6 +253,27 @@ Team Memory/
 Exception: `skills/` and `shared/` are collaborative — any instance may contribute.
 Living-checklist entries belong to the skill, not the instance.
 
+### Host Repository Charter (Required for Real Teams)
+
+The framework defines shared mechanics, but it does not fully define the organizational
+layer of a real multi-agent team.
+
+If multiple agents or people collaborate in one repository, the repository must also
+contain a host-specific team charter (for example `TEAM.md`) that defines:
+- active instance identities
+- instance-specific write areas
+- collaborative vs. read-only areas
+- session start and end commands for that environment
+- local paths, credentials, and tool-specific notes
+
+Why this is outside the core framework:
+- these rules are environment-specific, not framework-universal
+- the same Living Skills structure may run on one laptop, two machines, or a full team
+- hardcoding one team model into the framework would make the framework less portable
+
+For single-user use, this charter can be minimal.
+For multi-agent teams, it is effectively mandatory.
+
 ### Commit Convention
 
 ```
@@ -435,6 +456,12 @@ they read the situation and make a judgment call. The living-checklist makes thi
 judgment better over time ("this skill does not work well for this type of problem").
 Fuzzy activation is a feature, not a gap.
 
+This is not only about simplicity. A hardcoded selection layer would also suppress
+learning. If routing decisions are made invisibly, fewer edge cases become discussable,
+fewer disagreements surface, and less of the agent's reasoning remains visible to the
+human. Living Skills preserves visible judgment on purpose, because visible judgment is
+what can be challenged, refined, and improved over time.
+
 **Not a system with formal failure handling.** There is no automated mechanism for
 detecting misapplied skills, contradictory checklists, or outdated memory. The human
 layer is the failure detection mechanism — the same way a team lead notices when a
@@ -443,3 +470,19 @@ agent writes it into the living-checklist ("this skill produced incorrect result
 this context"), the next session surfaces it via the activation protocol, and the
 human and agent resolve it together. Formal failure handling would encode what is
 fundamentally a human judgment call into a mechanism that cannot make that judgment.
+
+This is also why Living Skills treats many "failures" as learning events rather than
+exceptions to be silently absorbed by a control layer. If a skill was misapplied, that
+is often exactly the moment that should become explicit, be discussed, and be written
+back into the checklist.
+
+**Not a complete team-operating model by itself.** Living Skills defines the knowledge
+and learning architecture, but not the full operating charter of a real team. Multi-agent
+setups need a host-repository layer that defines identity, ownership, local commands,
+and environment-specific write boundaries. This is a deliberate separation of concerns:
+the framework stays portable, while each host repository defines how its team actually works.
+
+Likewise, tool-agnostic does not mean behavior-identical. Different tools and model
+families will follow rituals with different strengths and weaknesses. That variation is
+not automatically a defect. As in real teams, behavioral differences can be productive
+as long as the shared artifacts remain explicit, inspectable, and versioned.

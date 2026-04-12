@@ -60,6 +60,69 @@ The framework remains the same.
 
 ---
 
+## Design Principles and Non-Goals
+
+Some things that may look like missing features are deliberate design choices.
+Living Skills is not trying to automate every decision an agent might make.
+
+### Human-visible judgment over hidden orchestration
+
+Living Skills is designed for human-agent collaboration, not for invisible routing logic.
+If a skill is relevant, one of two things should happen:
+- the human explicitly requests it
+- or the agent recognizes the fit from context and proposes or applies it visibly
+
+This is intentionally fuzzy. We do **not** want a hidden selection layer that routes work
+without the human noticing, because that would turn a collaborative workflow into an opaque
+control system.
+
+The reason is not just transparency. Hidden orchestration would also suppress exactly the
+kind of judgment, disagreement, and correction that makes a team smarter over time. Living
+Skills is meant to preserve that dynamic, not replace it with silent routing.
+
+### No skill selection engine
+
+There is no ranking algorithm, matching engine, or conflict resolver that decides which
+skill to use. That is not an unfinished part of the framework. It is a non-goal.
+
+Why: in a real team, people do not run a hardcoded selection engine before suggesting
+a method. They read the situation, discuss it, and make a judgment call. Living Skills
+tries to preserve exactly that property.
+
+A hardcoded selection layer would also reduce learning. If the system always routes work
+the same way, fewer edge cases are surfaced, fewer disagreements become explicit, and the
+human sees less of the reasoning that should be challenged or refined. Fuzzy activation
+keeps the choice visible and therefore learnable.
+
+### No formal failure handling layer
+
+Living Skills does not model every misapplication of a skill as a technical exception.
+If a skill was applied badly, if two checklist entries pull in different directions, or
+if a method turns out not to fit a context, that is treated as a learning event:
+- the human notices or challenges the result
+- the agent documents what went wrong
+- the learning is written back into the living-checklist
+
+This is also deliberate. We do **not** want a hidden agentic system making silent
+corrections behind the scenes when the real issue is human judgment, context, or method fit.
+
+In other words: not every "failure" should be absorbed by an invisible control layer.
+Many of them are exactly the moments from which the human-agent pair should learn.
+
+### Tool-agnostic does not mean behavior-identical
+
+Living Skills is tool-agnostic at the framework level: plain Markdown, Git, and explicit
+session rituals. It is **not** a promise that Claude Code, Codex, Cursor, or future tools
+will behave identically. Different tools interpret instructions differently and expose
+different lifecycle hooks. The framework embraces portability, not behavioral uniformity.
+
+That is also intentional. Real teams are not behavior-identical either. One engineer is
+disciplined about Git hygiene, another is stronger at broad exploration, a third is better
+at adversarial review. Living Skills benefits from that variation as long as the shared
+artifacts stay explicit, inspectable, and versioned.
+
+---
+
 ## Problem Definition
 
 Early LLM workflows were effectively stateless. Every session started from zero. Lessons were lost, mistakes repeated, and project context had to be rebuilt each time. Methodological learning did not accumulate in a durable way.
@@ -183,6 +246,29 @@ Each instance reads before acting, writes after acting, and contributes to share
 Different tools bring different strengths. The system improves through diversity.
 
 No vendor lock-in. No knowledge loss.
+
+---
+
+## Multi-Agent Teams Need a Host Repo Charter
+
+The framework defines the knowledge architecture: skills, checklists, revision logs,
+team memory, and session rituals.
+
+For a real multi-agent team, that is necessary but not sufficient. You also need a
+host-repository charter that answers operational questions the framework intentionally
+does not hardcode:
+- who the active instances are
+- which instance writes to which folder
+- which areas are collaborative vs. read-only
+- what the session start and end commands are in this specific environment
+- how identity, credentials, and local paths are configured
+
+In our production setup, this layer lives in a repository-specific `TEAM.md`.
+That file is not an optional convenience. It is the operational glue that turns the
+general framework into a functioning team workflow.
+
+Without such a host-repo charter, Living Skills still works for a single user or a
+simple setup. But multi-agent collaboration becomes underspecified very quickly.
 
 ---
 

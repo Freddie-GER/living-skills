@@ -115,3 +115,32 @@ See `setup/sync-setup.md` for conflict resolution steps.
 
 **Open question:** Should checklist entries carry instance attribution?
 (`**Instance:** Claude-Mac`) to make conflicts easier to resolve and contributions traceable.
+
+---
+
+## [2026-04-12] Multi-Agent Coordination Needs a Host-Level Team Charter
+
+**Status:** Framework gap clarified — partially solved only when the host repo adds it
+
+**Problem:** Living Skills defines skills, checklists, revision logs, and generic write
+boundaries, but a real team still needs repository-specific coordination rules:
+- who the active instances are
+- who writes where
+- what is collaborative vs. read-only
+- which commands define session start and session end in that environment
+- how identity, local paths, and credentials are configured
+
+Without that layer, the framework is strong enough for a single user or a loose setup,
+but multi-agent collaboration becomes underspecified.
+
+**Important distinction:** This is not an argument for a hidden orchestration system.
+The missing piece is not a selection engine or hardcoded routing logic. It is an explicit,
+human-readable team charter in the host repository.
+
+**Current guidance:** Add a host-specific `TEAM.md` (or equivalent) to any real multi-agent
+repository using Living Skills. The framework now documents this requirement in `README.md`
+and `framework.md`, but does not try to standardize one universal team model.
+
+**Why this remains a framework gap:** The public framework originally described the knowledge
+architecture more clearly than the team-operating layer. Production users may discover this
+only after they run multiple agents against the same repo.
