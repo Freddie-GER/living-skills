@@ -1,6 +1,7 @@
 # Living Checklist — <Skill Name>
 
-**Purpose:** Accumulated learnings from real sessions. Extended after every use.
+**Purpose:** Application experience layer — what works and what doesn't when applying this skill
+in this specific context. Grows with every session. Never merged back into Skill.md.
 
 ---
 

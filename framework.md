@@ -97,6 +97,22 @@ A good entry is:
 - Task-specific details with no reuse value
 - Personal preferences without reasoning
 
+### Two Distinct Knowledge Types
+
+Skill.md and living-checklist.md contain fundamentally different types of knowledge
+and must not be conflated:
+
+**Skill.md** holds authoritative domain knowledge — the method, framework, or reference
+that exists independently of your usage. Examples: the Scrum Guide for a Scrum skill,
+BABOK for a business analysis skill, a legal text for a compliance skill, a technical spec
+for an integration skill. This knowledge does not change because of your application experience.
+Skill.md is updated only when the underlying knowledge itself changes (new framework version,
+revised specification, updated methodology).
+
+**living-checklist.md** holds application experience — what works and what doesn't when
+applying that knowledge in this specific context. This layer grows with every session.
+It is never merged back into Skill.md. The two layers are complementary, not overlapping.
+
 ### Growth
 
 The living-checklist grows without limit. Older entries are never deleted.
@@ -139,9 +155,19 @@ Every use of a Living Skill begins with:
 1. Read `Skill.md` — understand the approach and context
 2. Read `living-checklist.md` — load accumulated knowledge
 3. Apply relevant checklist entries to the current task
+4. **Output the Skill Activation Protocol** before beginning work:
 
-This step is not optional. A skill used without reading the living-checklist
-ignores the core promise of the framework.
+```
+SKILL ACTIVATED: <skill-name>
+Date: YYYY-MM-DD
+Checklist read: Yes — [N] active entries, newest: [date of most recent entry]
+Active rule: "[verbatim quote of the most recent relevant rule]"
+Approach: [2–3 sentences on what this skill will do in this session]
+```
+
+This step is not optional. A claim to have read the checklist is not auditable —
+a verbatim quote proves it. The protocol is visible in the conversation history
+and auditable via Git if the session produces a commit.
 
 ### Session End
 

@@ -31,7 +31,14 @@ At the beginning of every session involving a Living Skill:
 1. `git pull` — get the latest learnings from all instances
 2. Read the relevant `Skill.md` — understand the approach
 3. Read the relevant `living-checklist.md` — load accumulated knowledge
-4. Apply checklist entries to the current task
+4. **Output the Skill Activation Protocol** before beginning work:
+   ```
+   SKILL ACTIVATED: <skill-name>
+   Date: YYYY-MM-DD
+   Checklist read: Yes — [N] active entries, newest: [date of most recent entry]
+   Active rule: "[verbatim quote of the most recent relevant rule]"
+   Approach: [2–3 sentences on what this skill will do in this session]
+   ```
 
 ## Session End
 

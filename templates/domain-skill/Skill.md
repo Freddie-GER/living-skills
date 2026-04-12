@@ -6,7 +6,18 @@ type: "domain"
 
 # <Domain Name> — Living Skill
 
-**Session Start:** Read `living-checklist.md` first — known pitfalls and proven solutions.
+## Session Start
+
+1. Read `living-checklist.md` — load known pitfalls and proven solutions
+2. Output the Skill Activation Protocol:
+
+```
+SKILL ACTIVATED: <skill-name>
+Date: YYYY-MM-DD
+Checklist read: Yes — [N] active entries, newest: [date of most recent entry]
+Active rule: "[verbatim quote of the most recent relevant rule]"
+Approach: [2–3 sentences on what this skill will do in this session]
+```
 
 ---
 

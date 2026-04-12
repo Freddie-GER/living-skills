@@ -6,7 +6,18 @@ type: "behavioral"
 
 # <Name>
 
-**Session Start:** Read `living-checklist.md` first — accumulated learnings from prior sessions.
+## Session Start
+
+1. Read `living-checklist.md` — load accumulated learnings from prior sessions
+2. Output the Skill Activation Protocol:
+
+```
+SKILL ACTIVATED: <skill-name>
+Date: YYYY-MM-DD
+Checklist read: Yes — [N] active entries, newest: [date of most recent entry]
+Active rule: "[verbatim quote of the most recent relevant rule]"
+Approach: [2–3 sentences on what this skill will do in this session]
+```
 
 ---
 

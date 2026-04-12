@@ -1,6 +1,7 @@
 # Living Checklist — Advocatus Diaboli
 
-**Purpose:** Accumulated review patterns from real sessions. Extended after every use.
+**Purpose:** Application experience layer — accumulated review patterns from real sessions.
+Grows with every session. Never merged back into Skill.md.
 
 ---
 

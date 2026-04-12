@@ -12,9 +12,17 @@ type: "behavioral"
 
 ## Session Start
 
-1. Read `Skill.md` — understand the process and stop criteria
-2. Read `living-checklist.md` — load accumulated patterns from prior sessions
-3. Apply relevant checklist entries as additional review criteria
+1. Read `living-checklist.md` — load accumulated patterns from prior sessions
+2. Output the Skill Activation Protocol:
+
+```
+SKILL ACTIVATED: advocatus-diaboli
+Date: YYYY-MM-DD
+Checklist read: Yes — [N] active entries, newest: [date of most recent entry]
+Active rule: "[verbatim quote of the most recent relevant rule]"
+```
+
+3. Apply relevant checklist entries as additional review criteria in Step 2
 
 ## Process
 
