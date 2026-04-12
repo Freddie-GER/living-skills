@@ -13,6 +13,10 @@ A new instance needs three things:
 
 The skills themselves don't need to be modified. They are model-agnostic by design.
 
+Important: this document assumes the shared environment already exists.
+If you are setting up the team context itself, read
+[`team-charter-setup.md`](team-charter-setup.md) first.
+
 ---
 
 ## Step 1: Access to the Repository
@@ -68,6 +72,9 @@ At the start of every session, say:
 > "Your instance name for commit messages is Claude-Mac."
 
 No configuration needed. Works with any agent.
+
+The instance name should match the naming scheme defined in your host-level `TEAM.md`.
+That file defines the shared team context; this onboarding flow adds one participant to it.
 
 ---
 

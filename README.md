@@ -270,6 +270,9 @@ general framework into a functioning team workflow.
 Without such a host-repo charter, Living Skills still works for a single user or a
 simple setup. But multi-agent collaboration becomes underspecified very quickly.
 
+See [`setup/team-charter-setup.md`](setup/team-charter-setup.md) for the setup flow and
+[`templates/TEAM.md`](templates/TEAM.md) for a starting template.
+
 ---
 
 ## Intellectual Foundation
