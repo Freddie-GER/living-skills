@@ -216,9 +216,10 @@ See [sync-setup.md](sync-setup.md) for the full sync configuration.
 
 | Environment | Config file | Status |
 |-------------|-------------|--------|
-| Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works in production |
+| Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works reliably in production |
 | Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Configuration in place |
-| Cursor | `.cursor/rules/*.mdc` | ✅ Tested, works in production |
+| Cursor | `.cursor/rules/*.mdc` | ⚠️ Tested — rules load, but session rituals not reliably executed (see below) |
+| Generic system prompt | depends on tool | 🔬 Untested — adapt as needed |
 | Aider | `.aider.conf.yml` or system prompt | 🔬 Untested |
 | Open WebUI | System prompt field | 🔬 Untested |
 
@@ -227,3 +228,55 @@ This is the recommended pattern — maintain one file, all tools read the same s
 
 If you get it working in an environment not listed here, please
 [contribute a configuration example](../CONTRIBUTING.md).
+
+---
+
+## Known Limitations — Cursor
+
+Cursor reads `.cursor/rules/*.mdc` reliably at session start. The configuration format
+above works. However, Cursor has a structural limitation that affects Living Skills:
+
+**Cursor has no session lifecycle hooks.**
+
+Claude Code executes `CLAUDE.md` instructions before every response. This means
+"pull before acting" and "commit after acting" are enforced automatically — Claude Code
+cannot skip them without violating its own context.
+
+Cursor has no equivalent mechanism. The rules are loaded, but Cursor treats them as
+guidelines, not enforced hooks. In practice this means:
+
+- Cursor may start working without pulling first, especially mid-session or after context grows
+- Cursor may complete a task and not commit, particularly in long sessions
+- There is no automatic fallback if Cursor forgets
+
+**What this means for you:**
+
+If you use Cursor in a multi-instance setup, you (the human) need to actively verify
+that Cursor pulls before starting and commits after finishing. Treat it like working
+with a colleague who is skilled but occasionally forgets process steps — a brief
+reminder at the start and end of each session is enough.
+
+This is not a bug in the framework. It is a property of the tool. The configuration
+above is correct; the gap is in Cursor's execution model.
+
+---
+
+## Human responsibility in collaborative setups
+
+Living Skills is a collaborative framework — it does not replace good Git hygiene,
+it assumes it.
+
+In any setup with more than one instance (multiple machines, multiple tools, or a mix
+of Claude Code and Cursor), the following remain human responsibilities:
+
+- Verifying that all instances pulled before a session began
+- Checking that all instances committed and pushed before leaving a session
+- Resolving conflicts that automated tools did not catch
+
+The framework provides structure for agents to follow. It does not provide enforcement.
+A multi-instance setup is only as reliable as the least-disciplined participant —
+and that participant may be a tool (like Cursor) rather than a person.
+
+When something goes wrong (uncommitted changes blocking a pull, conflicts between
+instances), treat it as a signal to review the session rituals, not a reason to add
+more automation.

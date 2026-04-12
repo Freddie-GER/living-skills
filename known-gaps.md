@@ -43,6 +43,38 @@ and supports content comparison before write. Contributions welcome.
 
 ---
 
+## [2026-04-12] Cursor Does Not Reliably Execute Session Rituals
+
+**Status:** Known limitation — no solution at the framework level
+
+**Problem:** Cursor reads `.cursor/rules/*.mdc` files correctly, but does not enforce
+session rituals (pull before starting, commit after finishing) with the same reliability
+as Claude Code.
+
+Claude Code executes `CLAUDE.md` before every response — it cannot skip the instructions
+without violating its own context. Cursor has no equivalent lifecycle hook. The rules
+are loaded as guidelines, not enforced pre/post-conditions.
+
+In practice: Cursor has been observed starting work without pulling first and completing
+sessions without committing — even when the rules explicitly require both.
+
+**Root cause:** Structural gap in Cursor's execution model, not a configuration problem.
+The `.cursor/rules/` format and content are correct. Cursor simply does not enforce
+them the way Claude Code enforces `CLAUDE.md`.
+
+**Impact:** In multi-instance setups with Cursor, uncommitted local changes can block
+a `git pull` on the next session. This requires manual conflict resolution and loses
+the seamless handoff the framework is designed to provide.
+
+**Mitigation:** Human oversight at session start and end when Cursor is involved.
+A brief reminder ("pull first", "commit now") is usually sufficient.
+Documented in [agent-configuration.md](setup/agent-configuration.md).
+
+**What would fix it:** A Cursor feature equivalent to Claude Code's `UserPromptSubmit`
+hook — a mechanism to execute commands before Cursor responds. Not available today.
+
+---
+
 ## [2026-04-11] Context-Dependent Tool Identity
 
 **Status:** No general solution — workarounds documented

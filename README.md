@@ -286,7 +286,20 @@ Any agent with file access can participate. Git handles versioning, merging, and
 
 One file to maintain. Every tool picks it up automatically.
 
+**Claude Code:** Fully tested. Session rituals (pull before, commit after) are enforced
+via `CLAUDE.md` hooks — Claude Code cannot skip them without violating its own context.
+Works reliably across sessions and instances.
+
+**Cursor:** Tested. Rules load correctly via `.cursor/rules/*.mdc`. However, Cursor
+has no session lifecycle hooks, so pull/commit rituals are not reliably enforced.
+In multi-instance setups with Cursor, human oversight at session boundaries is required.
+See [setup/agent-configuration.md](setup/agent-configuration.md) for details.
+
 **Untested but designed for:** Aider, Open WebUI, local models, any agent with filesystem + Git access.
+
+**Important:** This framework does not replace good Git hygiene — it assumes it.
+Pulling before a session and committing after remain human (or enforced-hook) responsibilities.
+The framework provides structure; it does not provide enforcement.
 
 ---
 
