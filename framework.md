@@ -417,3 +417,29 @@ on top of existing documentation. They do not replace system docs, ADRs, or READ
 **Not magic.** The quality of a Living Skill depends on instances consistently
 following the session rituals. Without discipline in writing back, the system
 degrades to static files.
+
+**Not a system with skill lifecycle management.** There are no expiry dates, TTLs,
+or review schedules for skills. A skill for Cobol, legal compliance, or a rarely-used
+methodology is not "stale" just because it hasn't been triggered in 90 days — it is
+dormant, waiting for the right problem. Skills are reviewed when they visibly stop
+working, exactly as human experts update their knowledge when it fails them in practice.
+Automated lifecycle triggers would produce false positives and administrative overhead
+with no real benefit.
+
+**Not a system with a skill selection engine.** There is no ranking algorithm, matching
+logic, or conflict resolution layer for deciding which skill to apply. Skill activation
+is intentionally fuzzy: either the user requests a skill explicitly, or the agent
+recognizes the fit from context and proposes it. This mirrors how a human expert team
+works — a consultant does not run a selection algorithm before suggesting a framework,
+they read the situation and make a judgment call. The living-checklist makes this
+judgment better over time ("this skill does not work well for this type of problem").
+Fuzzy activation is a feature, not a gap.
+
+**Not a system with formal failure handling.** There is no automated mechanism for
+detecting misapplied skills, contradictory checklists, or outdated memory. The human
+layer is the failure detection mechanism — the same way a team lead notices when a
+colleague is applying the wrong framework and says so. When something is wrong, the
+agent writes it into the living-checklist ("this skill produced incorrect results in
+this context"), the next session surfaces it via the activation protocol, and the
+human and agent resolve it together. Formal failure handling would encode what is
+fundamentally a human judgment call into a mechanism that cannot make that judgment.
