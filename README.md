@@ -425,7 +425,7 @@ The **Caveman technique** (inspired by [juliusbrussee/caveman](https://github.co
 
 See [`setup/quickstart.md`](setup/quickstart.md) to get started in 10 minutes.
 
-Reference implementations: [`examples/advocatus-diaboli/`](examples/advocatus-diaboli/) and [`examples/home-assistant/`](examples/home-assistant/).
+Reference implementations: [`examples/advocatus-diaboli/`](examples/advocatus-diaboli/) (behavioral), [`examples/home-assistant/`](examples/home-assistant/) (domain), and [`examples/token-optimization/`](examples/token-optimization/) (behavioral — untested, see Extensions above).
 
 ---
 
