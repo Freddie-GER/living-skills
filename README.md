@@ -396,6 +396,31 @@ The framework provides structure; it does not provide enforcement.
 
 ---
 
+## Extensions (Untested)
+
+The following additions are in active development but have not yet been validated across real sessions. They extend the framework beyond v1.0.0.
+
+### Token-Aware Developer Brief
+
+A behavioral skill that systematically optimizes token usage before starting any task. Developed as a Living Skill at `Team Memory/skills/token-optimization/`.
+
+Covers four dimensions:
+
+| Dimension | What it addresses |
+|-----------|-------------------|
+| Context Window Budget | Task sizing, overflow plan, MCP tool selection |
+| Knowledge Reuse | Living-checklist loading, Siyuan lookup, cross-instance sync |
+| Sub-Agent / Advisor Strategy | When to spawn, which model, Executor + Advisor pattern |
+| Output & Memory Compression | Caveman output modes, input file compression |
+
+The **Caveman technique** (inspired by [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman)) defines four output modes — None / Lite / Full / Ultra — that strip articles, filler, and hedging while preserving code, technical terms, and URLs. Benchmarks show ~65–75% response reduction and ~46% input compression for context files.
+
+**Proactive activation rule** (added to `TEAM.md`): `token-optimization` activates automatically for any task expected to consume >10K tokens, involve sub-agents, or use multiple MCP tools. Single-turn Q&A and short answers are exempt.
+
+**Status:** Skill created, proactive rule documented, not yet validated through real sessions. First session learnings will be written to `living-checklist.md`.
+
+---
+
 ## Getting Started
 
 See [`setup/quickstart.md`](setup/quickstart.md) to get started in 10 minutes.

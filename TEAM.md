@@ -68,10 +68,16 @@ Each instance documents its own work so others can read it.
 
 Update this list as you add skills:
 
-| Path | Use for |
-|------|---------|
-| `Team Memory/skills/` | Behavioral skills — browse for what fits |
-| `Infrastructure/skills/` | Domain skills — systems and tools |
+| Skill | Type | Path | Use for |
+|-------|------|------|---------|
+| **token-optimization** | behavioral | `Team Memory/skills/token-optimization/` | **Proactively before any non-trivial task** — context budget, knowledge reuse, sub-agent strategy, caveman output compression |
+| **advocatus-diaboli** | behavioral | `Team Memory/skills/advocatus-diaboli/` | Critical analysis, strategy review, stress-testing assumptions |
+| **skill-creator** | behavioral | `Team Memory/skills/skill-creator/` | Creating new Living Skills |
+| **home-assistant** | domain | `Infrastructure/skills/home-assistant/` | HA automations, entities, integrations, debugging |
+| **siyuan** | domain | `Infrastructure/skills/siyuan/` | Git-sync, MCP setup, notebook access, Siyuan config |
+| *(browse)* | domain | `Infrastructure/skills/` | Other domain skills — systems and tools |
+
+**Token optimization — proactive rule:** Activate `token-optimization` **without being asked** whenever a task will likely consume >10K tokens, involve sub-agents, or use multiple MCP tools. Exempt: short answers, single-turn Q&A.
 
 ## First time setup?
 
