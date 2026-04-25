@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for all AI tools in this repository.
 > `CLAUDE.md` (Claude Code) and `AGENTS.md` (Codex) are symlinks pointing here.
-> Cursor reads `.cursor/rules/living-skills.mdc` separately.
+> `.cursor/rules/living-skills.mdc` is generated from this file — run `bash scripts/generate-cursor-rules.sh` after edits.
 > Edit only this file — all tools pick up the changes automatically.
 
 ## Who I am
@@ -51,9 +51,13 @@ After completing a task that used a Living Skill:
    **Why it matters:** context and consequences
    **Rule:** a concrete guideline for next time
    ```
-2. Commit and push:
+2. If `TEAM.md` changed, regenerate the Cursor rules:
    ```bash
-   git add <skill-path>/living-checklist.md
+   bash scripts/generate-cursor-rules.sh
+   ```
+3. Commit and push:
+   ```bash
+   git add <skill-path>/living-checklist.md .cursor/rules/living-skills.mdc
    git commit -m "<Your-Instance-Name>: <skill-name> — session [YYYY-MM-DD]"
    git push
    ```
