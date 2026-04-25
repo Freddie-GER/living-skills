@@ -23,7 +23,10 @@ No separate configuration file needed.
 `TEAM.md` by running:
 
 ```bash
+# macOS / Linux:
 bash scripts/generate-cursor-rules.sh
+# Windows (PowerShell):
+pwsh scripts/generate-cursor-rules.ps1
 ```
 
 Run this script whenever `TEAM.md` changes. Commit the result.
@@ -56,7 +59,7 @@ If you want to connect a tool that is not yet listed in `TEAM.md`:
 
 1. Add a row to the Team table in `TEAM.md`
 2. Create `Team Memory/<your-instance>/config.md`
-3. Run `bash scripts/generate-cursor-rules.sh` if the new tool is Cursor
+3. Run `scripts/generate-cursor-rules.sh` (or `.ps1` on Windows) if the new tool is Cursor
 4. Commit and push
 
 See [onboarding-new-instance.md](onboarding-new-instance.md) for the full flow.

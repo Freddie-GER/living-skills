@@ -108,7 +108,8 @@ git pull
 
 # Session end (always):
 # If TEAM.md changed, regenerate cursor rules first:
-bash scripts/generate-cursor-rules.sh
+bash scripts/generate-cursor-rules.sh   # macOS / Linux
+pwsh scripts/generate-cursor-rules.ps1  # Windows
 
 git add <skill-path>/living-checklist.md .cursor/rules/living-skills.mdc
 git commit -m "<Instance>: <skill-name> — session [YYYY-MM-DD]"

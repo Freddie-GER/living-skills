@@ -98,7 +98,10 @@ contributes only its own folder; no instance accidentally reads another's config
 If any instance in the team uses Cursor, regenerate the Cursor rules file:
 
 ```bash
+# macOS / Linux:
 bash scripts/generate-cursor-rules.sh
+# Windows (PowerShell):
+pwsh scripts/generate-cursor-rules.ps1
 ```
 
 This keeps `.cursor/rules/living-skills.mdc` in sync with the updated `TEAM.md`.
@@ -147,7 +150,7 @@ Living Skills work with any model that can read files, write files, and run Git.
 `AGENTS.md` is a symlink to `TEAM.md` — same pattern.
 
 **Cursor:** Reads `.cursor/rules/living-skills.mdc`, generated from `TEAM.md`.
-Run `scripts/generate-cursor-rules.sh` after any `TEAM.md` change.
+Run `scripts/generate-cursor-rules.sh` (macOS/Linux) or `.ps1` (Windows) after any `TEAM.md` change.
 
 **Local models via agent frameworks (Ollama, LM Studio, etc.):**
 Requires a framework that provides file tools. Copy `TEAM.md` content into

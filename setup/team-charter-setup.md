@@ -78,7 +78,7 @@ These are environment-specific and do not belong in the generic framework spec.
 Explain how each tool reads the charter:
 - `CLAUDE.md` → symlink to `TEAM.md` (Claude Code reads this automatically)
 - `AGENTS.md` → symlink to `TEAM.md` (Codex reads this automatically)
-- `.cursor/rules/living-skills.mdc` → generated from `TEAM.md` via `scripts/generate-cursor-rules.sh`
+- `.cursor/rules/living-skills.mdc` → generated from `TEAM.md` via `scripts/generate-cursor-rules.sh` (macOS/Linux) or `scripts/generate-cursor-rules.ps1` (Windows)
 
 The point is not identical tooling. The point is a single shared source of truth.
 Run the generator script and commit the result whenever `TEAM.md` changes.
