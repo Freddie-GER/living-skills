@@ -107,7 +107,10 @@ git pull
 # ... do the work, read Skill.md, read living-checklist.md ...
 
 # Session end (always):
-git add skills/<skill-name>/living-checklist.md
+# If TEAM.md changed, regenerate cursor rules first:
+bash scripts/generate-cursor-rules.sh
+
+git add <skill-path>/living-checklist.md .cursor/rules/living-skills.mdc
 git commit -m "<Instance>: <skill-name> — session [YYYY-MM-DD]"
 git push
 ```

@@ -76,11 +76,12 @@ These are environment-specific and do not belong in the generic framework spec.
 ### 4. Tool bindings
 
 Explain how each tool reads the charter:
-- `CLAUDE.md` → symlink or reference to `TEAM.md`
-- `AGENTS.md` → symlink or reference to `TEAM.md`
-- Cursor rules → replicate the relevant team instructions in `.cursor/rules/`
+- `CLAUDE.md` → symlink to `TEAM.md` (Claude Code reads this automatically)
+- `AGENTS.md` → symlink to `TEAM.md` (Codex reads this automatically)
+- `.cursor/rules/living-skills.mdc` → generated from `TEAM.md` via `scripts/generate-cursor-rules.sh`
 
 The point is not identical tooling. The point is a single shared source of truth.
+Run the generator script and commit the result whenever `TEAM.md` changes.
 
 ### 5. Local environment notes
 

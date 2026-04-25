@@ -1,230 +1,78 @@
 # Agent Configuration — Living Skills
 
-Your agent needs to know three things to use Living Skills correctly:
-
-1. **Where** the skill repository lives on disk
-2. **Who** it is (its instance name, for commit messages)
-3. **What to do** at session start and end (the rituals)
-
-This guide shows complete, copy-paste-ready configurations for the most common setups.
-Replace everything in `<angle brackets>` with your actual values.
+In this repository, all AI tools read from a single source of truth: `TEAM.md`.
+You do not configure each agent separately.
 
 ---
 
-## Claude Code — CLAUDE.md
+## How it works
 
-Claude Code reads a file called `CLAUDE.md` at the start of every session.
-This is the right place to configure Living Skills.
-
-**Where to put it:** In the root of your Living Skills repository, or in your
-home directory (`~/.claude/CLAUDE.md`) to apply it globally.
-
-```markdown
-# Living Skills Configuration
-
-## Who I am
-My instance name for commit messages: <Your-Instance-Name>
-Example: Claude-Mac, Claude-Server, Claude-Laptop
-
-## Repository location
-The Living Skills repository is at: <absolute path to the repo>
-Example: /Users/yourname/living-skills
-
-## Session Start (always do this first)
-At the beginning of every session involving a Living Skill:
-1. Run: git -C <path-to-repo> pull
-2. Read the relevant Skill.md
-3. Read the relevant living-checklist.md
-4. Apply what you learned from the checklist to the current task
-
-## Session End (always do this last)
-After completing a task that used a Living Skill:
-1. Write new learnings to living-checklist.md using this format:
-   ### [today's date] — [brief task description]
-   **Learning:** what was discovered or what failed
-   **Why it matters:** context and consequences
-   **Rule:** a concrete guideline for next time
-2. Stage and commit:
-   git -C <path-to-repo> add skills/<skill-name>/living-checklist.md
-   git -C <path-to-repo> commit -m "<Your-Instance-Name>: <skill-name> — session [date]"
-   git -C <path-to-repo> push
-
-## Available skills
-List the skills in your repository so I know what's available:
-- skills/my-first-skill/ — [what it's for]
-- skills/my-domain/ — [what it's for]
+```
+TEAM.md  ←──────────────────────── single source of truth
+    │
+    ├── CLAUDE.md           (symlink)   ← Claude Code reads this
+    ├── AGENTS.md           (symlink)   ← Codex reads this
+    └── .cursor/rules/
+          living-skills.mdc (generated) ← Cursor reads this
 ```
 
-**Minimal version** (if you want to keep it short):
+**Claude Code and Codex** read `TEAM.md` automatically via symlinks.
+No separate configuration file needed.
 
-```markdown
-# Living Skills
+**Cursor** reads `.cursor/rules/living-skills.mdc`, which is generated from
+`TEAM.md` by running:
 
-Instance name: <Your-Instance-Name>
-Repository: <path-to-repo>
-
-Before any task: git pull, read Skill.md and living-checklist.md for the relevant skill.
-After any task: write learnings to living-checklist.md, commit and push.
+```bash
+bash scripts/generate-cursor-rules.sh
 ```
+
+Run this script whenever `TEAM.md` changes. Commit the result.
 
 ---
 
-## Cursor — .cursor/rules
+## Instance-specific configuration
 
-Cursor reads rules files from `.cursor/rules/` in your project directory.
-Create a file called `.cursor/rules/living-skills.mdc`:
+Things that differ per instance (local paths, service URLs, credentials location)
+do **not** belong in `TEAM.md`. Put them in:
 
-```markdown
----
-description: Living Skills session rituals and configuration
-alwaysApply: true
----
-
-# Living Skills
-
-## Instance identity
-Always identify yourself as: <Your-Instance-Name>
-Use this name in all Git commit messages.
-
-## Repository
-The Living Skills repository is at: <absolute path>
-
-## Available skills
-
-| Path | Purpose |
-|------|---------|
-| `skills/<skill-a>/` | [what it's for] |
-| `skills/<skill-b>/` | [what it's for] |
-
-## Before starting any task covered by a skill
-1. Run `git pull` in the repository directory
-2. Read `skills/<relevant-skill>/Skill.md` — understand the approach
-3. Read `skills/<relevant-skill>/living-checklist.md` — load accumulated learnings
-4. Apply checklist entries to the current task
-
-## After completing a task
-Write new learnings to `skills/<relevant-skill>/living-checklist.md`:
-
-### Format
-### [YYYY-MM-DD] — [task context]
-**Learning:** [what was discovered]
-**Why it matters:** [context]
-**Rule:** [actionable guideline for future sessions]
-
-Then commit:
-git add skills/<skill>/living-checklist.md
-git commit -m "<Your-Instance-Name>: <skill> — session [date]"
-git push
+```
+Team Memory/<your-instance>/config.md
 ```
 
-**Practical notes from production use:**
+This file is read-only for all other instances. It is the right place for:
+- absolute paths on this machine
+- tool-specific setup notes
+- pointers to where credentials live (never the credentials themselves)
+- anything else that only applies to this one instance
 
-- **`alwaysApply: true`** loads the rules into every Cursor session. This works well
-  when the repo is dedicated to Living Skills. If the repo also contains other projects,
-  consider using a `description`-based trigger instead — but note that Cursor's matching
-  can be unreliable, so `alwaysApply` is the safer choice.
-- **Explicit skill table** is better than auto-discovery in Cursor. Unlike Claude Code,
-  Cursor does not always explore the file tree proactively — listing skills explicitly
-  ensures they are found.
-- **Combine with an identity rule** if you have a separate `.mdc` for team/instance
-  identity. Use a description like `"Living Skills session rituals — supplements identity-rule.mdc"`
-  to signal that both rules work together.
-- **Caveat:** Global Cursor rules (`~/.cursor/rules/`) apply to all repos, including
-  private ones without team context. See [Known Gaps — Context-Dependent Tool Identity](../known-gaps.md#2026-04-11-context-dependent-tool-identity) for the open design problem.
+Your instance name in commit messages comes from this file and from the identity
+row you added to `TEAM.md` during onboarding.
 
 ---
 
-## Generic System Prompt
+## Adding a new tool or AI model
 
-If your agent accepts a system prompt (ChatGPT custom instructions, API system field,
-Open WebUI system prompt, or similar), paste this in:
+If you want to connect a tool that is not yet listed in `TEAM.md`:
 
-```
-You have access to a Living Skills repository at <path or description of location>.
+1. Add a row to the Team table in `TEAM.md`
+2. Create `Team Memory/<your-instance>/config.md`
+3. Run `bash scripts/generate-cursor-rules.sh` if the new tool is Cursor
+4. Commit and push
 
-Your instance name is: <Your-Instance-Name>
-
-BEFORE starting any task covered by a skill:
-- Pull the latest version of the repository (git pull, or ask the user to confirm it's up to date)
-- Read the Skill.md for the relevant skill
-- Read the living-checklist.md for the relevant skill
-- Apply the checklist learnings to how you approach the task
-
-AFTER completing a task covered by a skill:
-- Write any new learnings to living-checklist.md using this format:
-  ### [date] — [task context]
-  **Learning:** what was discovered or what failed
-  **Why it matters:** context
-  **Rule:** actionable guideline for next time
-- Commit the changes: git commit -m "<Your-Instance-Name>: <skill-name> — session [date]"
-- Push to the remote
-
-The available skills are: <list them here>
-```
-
----
-
-## What "available skills" means
-
-You don't have to list every skill manually. You can tell the agent to discover them:
-
-```
-The skills directory is at: <path>/skills/
-Read the Skill.md files there to understand what skills are available
-and when to use each one.
-```
-
-Or list them explicitly for faster sessions:
-
-```
-Available skills:
-- skills/code-review/ — use when reviewing pull requests or any code changes
-- skills/home-assistant/ — use for any smart home automation work
-- skills/research/ — use for any research or analysis task
-```
-
-Explicit lists load faster. Discovery is more flexible. Pick what works for your setup.
-
----
-
-## Multi-instance setup: two machines, one repository
-
-If you run two agents on two different machines (e.g. a laptop and a server),
-each machine needs its own CLAUDE.md (or equivalent) with its own instance name,
-but both pointing to the same remote Git repository.
-
-**Machine 1 — CLAUDE.md:**
-```
-Instance name: Claude-Laptop
-Repository: /home/user/living-skills
-Remote: git@github.com:your-org/living-skills.git
-```
-
-**Machine 2 — CLAUDE.md:**
-```
-Instance name: Claude-Server
-Repository: /opt/living-skills
-Remote: git@github.com:your-org/living-skills.git  ← same remote
-```
-
-Both agents pull before sessions and push after. Git handles the merge.
-See [sync-setup.md](sync-setup.md) for the full sync configuration.
+See [onboarding-new-instance.md](onboarding-new-instance.md) for the full flow.
 
 ---
 
 ## Tested environments
 
-| Environment | Config file | Status |
-|-------------|-------------|--------|
-| Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Tested, works reliably in production |
-| Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Tested in production in a shared multi-instance setup |
-| Cursor | `.cursor/rules/*.mdc` | ⚠️ Tested — rules load, but session rituals not reliably executed (see below) |
-| Generic system prompt | depends on tool | 🔬 Untested — adapt as needed |
+| Environment | Config | Status |
+|-------------|--------|--------|
+| Claude Code | `CLAUDE.md` → symlink to `TEAM.md` | ✅ Production-tested |
+| Codex (OpenAI) | `AGENTS.md` → symlink to `TEAM.md` | ✅ Production-tested |
+| Cursor | `.cursor/rules/living-skills.mdc` (generated from `TEAM.md`) | ⚠️ Rules load reliably; session rituals not enforced (see below) |
+| Generic system prompt | copy TEAM.md content into system field | 🔬 Untested |
 | Aider | `.aider.conf.yml` or system prompt | 🔬 Untested |
 | Open WebUI | System prompt field | 🔬 Untested |
-
-**Note:** `CLAUDE.md` (Claude Code) and `AGENTS.md` (Codex) are both symlinks to `TEAM.md`.
-This is the recommended pattern — maintain one file, all tools read the same source.
 
 If you get it working in an environment not listed here, please
 [contribute a configuration example](../CONTRIBUTING.md).
@@ -233,50 +81,34 @@ If you get it working in an environment not listed here, please
 
 ## Known Limitations — Cursor
 
-Cursor reads `.cursor/rules/*.mdc` reliably at session start. The configuration format
-above works. However, Cursor has a structural limitation that affects Living Skills:
+Cursor reads `.cursor/rules/*.mdc` reliably at session start. However:
 
 **Cursor has no session lifecycle hooks.**
 
-Claude Code executes `CLAUDE.md` instructions before every response. This means
-"pull before acting" and "commit after acting" are enforced automatically — Claude Code
-cannot skip them without violating its own context.
+Claude Code enforces "pull before acting" and "commit after acting" because
+`CLAUDE.md` instructions are processed before every response.
 
-Cursor has no equivalent mechanism. The rules are loaded, but Cursor treats them as
-guidelines, not enforced hooks. In practice this means:
+Cursor treats rules as guidelines, not enforced hooks. In practice:
 
-- Cursor may start working without pulling first, especially mid-session or after context grows
-- Cursor may complete a task and not commit, particularly in long sessions
-- There is no automatic fallback if Cursor forgets
+- Cursor may start working without pulling first
+- Cursor may complete a task without committing
+- There is no automatic fallback if Cursor skips a step
 
-**What this means for you:**
+If you use Cursor in a multi-instance setup, verify at the start and end of
+each session that it pulled and committed. A brief reminder is enough.
 
-If you use Cursor in a multi-instance setup, you (the human) need to actively verify
-that Cursor pulls before starting and commits after finishing. Treat it like working
-with a colleague who is skilled but occasionally forgets process steps — a brief
-reminder at the start and end of each session is enough.
-
-This is not a bug in the framework. It is a property of the tool. The configuration
-above is correct; the gap is in Cursor's execution model.
+This is not a framework bug. It is a property of the tool.
 
 ---
 
 ## Human responsibility in collaborative setups
 
-Living Skills is a collaborative framework — it does not replace good Git hygiene,
-it assumes it.
+Living Skills does not replace good Git hygiene — it assumes it.
 
-In any setup with more than one instance (multiple machines, multiple tools, or a mix
-of Claude Code and Cursor), the following remain human responsibilities:
+In any multi-instance setup, the following remain human responsibilities:
 
-- Verifying that all instances pulled before a session began
-- Checking that all instances committed and pushed before leaving a session
-- Resolving conflicts that automated tools did not catch
+- Verifying all instances pulled before starting
+- Confirming all instances committed and pushed before leaving
+- Resolving conflicts that tools did not catch
 
-The framework provides structure for agents to follow. It does not provide enforcement.
-A multi-instance setup is only as reliable as the least-disciplined participant —
-and that participant may be a tool (like Cursor) rather than a person.
-
-When something goes wrong (uncommitted changes blocking a pull, conflicts between
-instances), treat it as a signal to review the session rituals, not a reason to add
-more automation.
+The framework provides structure. It does not provide enforcement.

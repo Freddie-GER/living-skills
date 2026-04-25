@@ -6,168 +6,163 @@ How to add a new agent or AI model to an existing Living Skills pool.
 
 ## What "onboarding" means
 
-A new instance needs three things:
-1. Access to the shared Git repository
-2. A way to read and write files
-3. Instructions on when and how to use the skills
+Adding a new instance means two things:
+1. Registering it in the shared team context (`TEAM.md`)
+2. Giving it its own memory folder (`Team Memory/<your-instance>/`)
 
-The skills themselves don't need to be modified. They are model-agnostic by design.
+The skills themselves do not need to change. They are model-agnostic by design.
 
-Important: this document assumes the shared environment already exists.
-If you are setting up the team context itself, read
+**Before you start:** This assumes a team context (`TEAM.md`) already exists.
+If you are setting up the shared environment from scratch, read
 [`team-charter-setup.md`](team-charter-setup.md) first.
 
 ---
 
 ## Step 1: Access to the Repository
 
-Follow [sync-setup.md](sync-setup.md) to give the new machine/environment
-access to the shared Git remote.
+Follow [sync-setup.md](sync-setup.md) to connect the new machine or environment
+to the shared Git remote.
 
 ```bash
 git clone <remote-url> living-skills
 cd living-skills
-git log --oneline -5   # verify you see existing commits from other instances
+git log --oneline -5   # verify you see commits from other instances
 ```
 
 ---
 
-## Step 2: Choose an Instance Name
+## Step 2: Register in TEAM.md
 
-Pick a short name that identifies this machine and agent in Git commits.
-Examples: `Claude-Mac`, `Claude-Server`, `Codex-Laptop`, `LocalLLM-NAS`
+Open `TEAM.md` and add a row for the new instance to the Team table:
 
-The name ends up in commit messages like:
-```
-Claude-Mac: home-assistant — session [2026-04-10]
+```markdown
+| **Your-Instance-Name** | Tool (Claude Code / Cursor / Codex / …) | `Team Memory/your-instance/` |
 ```
 
-### How to set it — pick whichever fits your setup
+Also add your folder to the repository layout section if it has one.
 
-**Option A: Put it in your agent's config file (recommended)**
-
-For Claude Code, add this line to your `CLAUDE.md` (the project instructions file):
+Choose an instance name that appears in commit messages:
 ```
-My instance name for Living Skills commits: Claude-Mac
+Your-Instance-Name: home-assistant — session [2026-04-10]
 ```
-Your agent will pick it up from there and use it in commit messages.
 
-**Option B: Add it to your shell profile (persistent, technical)**
+Examples: `Claude-Mac`, `Claude-Server`, `Codex-Laptop`, `Cursor-Desktop`
 
-Open your shell profile in a text editor:
-- On Mac/Linux with zsh: `~/.zshrc`
-- On Mac/Linux with bash: `~/.bashrc`
-- On Windows: use System Properties → Environment Variables
+---
 
-Add this line:
+## Step 3: Create your Team Memory folder
+
 ```bash
-export LIVING_SKILLS_INSTANCE="Claude-Mac"
+mkdir -p "Team Memory/your-instance"
 ```
 
-Then reload it: `source ~/.zshrc` (or restart your terminal).
+Create `Team Memory/your-instance/config.md` with instance-specific details:
 
-**Option C: Just tell your agent at session start (simplest)**
+```markdown
+# Your-Instance-Name — Configuration
 
-At the start of every session, say:
-> "Your instance name for commit messages is Claude-Mac."
+**Identity:** Your-Instance-Name — [tool] on [machine description]
 
-No configuration needed. Works with any agent.
+## Repository path
+/absolute/path/to/living-skills
 
-The instance name should match the naming scheme defined in your host-level `TEAM.md`.
-That file defines the shared team context; this onboarding flow adds one participant to it.
+## Notes
+[Any local paths, service URLs, or setup notes specific to this instance.
+Never put credentials here — only note where they live.]
+```
+
+Create `Team Memory/your-instance/status.md` for session notes (can start empty).
+
+### How the agent knows who it is
+
+Identity is established in two layers:
+
+**Outside the repo (machine-local):** Your tool's global configuration tells the
+agent its instance name. For Claude Code this is `~/.claude/CLAUDE.md` or a
+project-level memory file; for other tools, their equivalent global config.
+Add one line: `My instance name is: Your-Instance-Name`
+
+**Inside the repo:** `Team Memory/your-instance/config.md` reinforces identity
+with an explicit declaration (`Identity: Your-Instance-Name — [tool] on [machine]`).
+At session start, `TEAM.md` instructs every instance to read its own config.md —
+the agent finds the right one because it matches the identity it already knows
+from the machine-local config.
+
+The two-layer approach means: the repo stays machine-agnostic; each machine
+contributes only its own folder; no instance accidentally reads another's config.
 
 ---
 
-## Step 3: Instruct the Agent
+## Step 4: Update Cursor rules (if applicable)
 
-The new instance needs to know the session rituals. Add this to its
-system prompt, CLAUDE.md, or equivalent configuration file:
+If any instance in the team uses Cursor, regenerate the Cursor rules file:
 
+```bash
+bash scripts/generate-cursor-rules.sh
 ```
-# Living Skills
 
-Before starting any task covered by a skill, read:
-  - skills/<skill-name>/Skill.md
-  - skills/<skill-name>/living-checklist.md
+This keeps `.cursor/rules/living-skills.mdc` in sync with the updated `TEAM.md`.
 
-After completing the task, write any new learnings to:
-  - skills/<skill-name>/living-checklist.md
+---
 
-Entry format:
-  ### [YYYY-MM-DD] — [Task context]
-  **Learning:** What was discovered
-  **Why it matters:** Context
-  **Rule:** Actionable guideline for future sessions
+## Step 5: Commit and push
 
-Then commit:
-  git add skills/<skill-name>/living-checklist.md
-  git commit -m "<INSTANCE_NAME>: <skill-name> — session [YYYY-MM-DD]"
-  git push
+```bash
+git add TEAM.md "Team Memory/your-instance/" .cursor/rules/living-skills.mdc
+git commit -m "Your-Instance-Name: onboard new instance [$(date +%Y-%m-%d)]"
+git push
 ```
 
 ---
 
-## Step 4: Run a First Session
+## Step 6: Run a first session
 
-Pick one existing skill and run a real task with it:
+Pick one existing skill and use it for a real task:
 
 1. `git pull`
-2. Read `skills/<skill-name>/Skill.md`
-3. Read `skills/<skill-name>/living-checklist.md`
+2. Read the relevant `Skill.md`
+3. Read the relevant `living-checklist.md`
 4. Complete the task
-5. Write at least one entry to living-checklist.md (even if minimal)
+5. Write at least one entry to `living-checklist.md`
 6. Commit and push
 
-Check the result:
-```bash
-git log --oneline -3
-# Should show: "YourInstance: skill-name — session [date]"
-```
-
----
-
-## Step 5: Verify Cross-Instance Visibility
-
-On another machine or instance:
+Verify on another instance:
 ```bash
 git pull
-cat skills/<skill-name>/living-checklist.md
+cat "Team Memory/skills/<skill-name>/living-checklist.md"
 ```
 
-The new instance's entry should be visible. The loop is closed.
+The new instance's entry should appear. The loop is closed.
 
 ---
 
 ## Notes on Different Model Families
 
-Living Skills work with any model that can:
-- Read files from disk
-- Write files to disk
-- Run basic shell commands (git)
+Living Skills work with any model that can read files, write files, and run Git.
 
 **Claude Code:** Built-in filesystem and bash access. Works out of the box.
+`CLAUDE.md` is a symlink to `TEAM.md` — no separate configuration needed.
 
-**OpenAI Codex / Cursor:** Filesystem access via editor integration.
-  Ensure the agent can write to the repository directory.
+**OpenAI Codex:** Filesystem access via editor integration.
+`AGENTS.md` is a symlink to `TEAM.md` — same pattern.
 
-**Local models (Ollama, LM Studio) via agent frameworks:**
-  Requires an agent framework that provides file tools (e.g., Open WebUI with
-  tool support, LangChain agents, or a custom wrapper). The model itself
-  does not need special capabilities beyond text generation.
+**Cursor:** Reads `.cursor/rules/living-skills.mdc`, generated from `TEAM.md`.
+Run `scripts/generate-cursor-rules.sh` after any `TEAM.md` change.
 
-**Aider:** Can read/write files natively. Add the living-skills repo to
-  its working directory.
+**Local models via agent frameworks (Ollama, LM Studio, etc.):**
+Requires a framework that provides file tools. Copy `TEAM.md` content into
+the system prompt, or point the agent at the file directly.
+
+**Aider:** Can read/write files natively. Add the repository to its working directory.
 
 ---
 
-## What Different Models Bring
+## What different models bring
 
-Different model families tend to approach problems differently.
-This is a feature, not a bug:
+Different model families approach problems differently. This is a feature:
 
 - One model may catch patterns another misses
-- Different "cognitive styles" produce richer living-checklists over time
+- Different reasoning styles produce richer living-checklists over time
 - The skill grows from multiple perspectives
 
-Do not try to normalize entries across models. Diversity in the checklist
-is the point.
+Do not normalize entries across models. Diversity in the checklist is the point.
