@@ -57,7 +57,10 @@ After completing a task that used a Living Skill:
    ```
 2. If `TEAM.md` changed, regenerate the Cursor rules:
    ```bash
+   # macOS / Linux:
    bash scripts/generate-cursor-rules.sh
+   # Windows (PowerShell):
+   pwsh scripts/generate-cursor-rules.ps1
    ```
 3. Commit and push:
    ```bash
