@@ -2,11 +2,22 @@
 
 All notable changes to this project will be documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-This project does not yet follow Semantic Versioning — entries are dated and
-grouped by release.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+at the repository level:
 
-## [2026-06-20]
+- **MAJOR** — breaking changes to the framework spec (existing `Skill.md` /
+  `living-checklist.md` / `revisionslog.md` files stop being valid under the new
+  spec, or a session ritual changes shape).
+- **MINOR** — new examples, non-breaking framework additions, new templates or
+  setup docs.
+- **PATCH** — documentation fixes, typo corrections, clarifications that do not
+  change behavior.
+
+Per-skill `revisionslog.md` files version each Skill's own evolution and are
+independent of the repository version.
+
+## [0.3.0] — 2026-06-20
 
 ### Added
 - New behavioral example skill: [`examples/secure-architecture/`](examples/secure-architecture/).
