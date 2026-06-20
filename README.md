@@ -396,36 +396,31 @@ The framework provides structure; it does not provide enforcement.
 
 ---
 
-## Extensions (Untested)
+## Example Skills
 
-The following additions are in active development but have not yet been validated across real sessions. They extend the framework beyond v1.0.0.
+Reference implementations live in [`examples/`](examples/). Each one is a working
+Living Skill with a `Skill.md`, a `living-checklist.md`, and a `revisionslog.md`,
+and is small enough to read in one sitting.
 
-### Token-Aware Developer Brief
+| Skill | Type | What it does |
+|-------|------|--------------|
+| [`advocatus-diaboli`](examples/advocatus-diaboli/) | behavioral | Iterative adversarial review — dismantles assumptions, finds counterarguments, accumulates blind-spot patterns across sessions |
+| [`secure-architecture`](examples/secure-architecture/) | behavioral | Seven-layer authorization design checklist — AuthN vs AuthZ, stable IDs over mutable fields, SoD in the data model not the UI, demo facade vs production foundation |
+| [`business-analysis`](examples/business-analysis/) | behavioral | Seven-step BABOK/CBAP procedure — Executive Summary → Stakeholder Register → Personas → User Stories with Acceptance Criteria → FR/NFR → Gap Analysis → Risk Register + Out-of-Scope |
+| [`token-optimization`](examples/token-optimization/) | behavioral | Token-Aware Developer Brief — context budget, knowledge reuse, sub-agent/advisor strategy, Caveman output compression (None / Lite / Full / Ultra) |
+| [`home-assistant`](examples/home-assistant/) | domain | Domain skill example — automations, entities, debugging patterns for a specific system |
 
-A behavioral skill that systematically optimizes token usage before starting any task. Developed as a Living Skill at `Team Memory/skills/token-optimization/`.
+The behavioral examples are transferable across domains. The domain example shows
+how the same Skill format is used for system-specific knowledge.
 
-Covers four dimensions:
-
-| Dimension | What it addresses |
-|-----------|-------------------|
-| Context Window Budget | Task sizing, overflow plan, MCP tool selection |
-| Knowledge Reuse | Living-checklist loading, Siyuan lookup, cross-instance sync |
-| Sub-Agent / Advisor Strategy | When to spawn, which model, Executor + Advisor pattern |
-| Output & Memory Compression | Caveman output modes, input file compression |
-
-The **Caveman technique** (inspired by [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman)) defines four output modes — None / Lite / Full / Ultra — that strip articles, filler, and hedging while preserving code, technical terms, and URLs. Benchmarks show ~65–75% response reduction and ~46% input compression for context files.
-
-**Proactive activation rule** (added to `TEAM.md`): `token-optimization` activates automatically for any task expected to consume >10K tokens, involve sub-agents, or use multiple MCP tools. Single-turn Q&A and short answers are exempt.
-
-**Status:** Skill created, proactive rule documented, not yet validated through real sessions. First session learnings will be written to `living-checklist.md`.
+The `living-checklist.md` entries in each example are **illustrative** — plausible
+patterns shown in the right format, not entries copied from real client work.
 
 ---
 
 ## Getting Started
 
 See [`setup/quickstart.md`](setup/quickstart.md) to get started in 10 minutes.
-
-Reference implementations: [`examples/advocatus-diaboli/`](examples/advocatus-diaboli/) (behavioral), [`examples/home-assistant/`](examples/home-assistant/) (domain), and [`examples/token-optimization/`](examples/token-optimization/) (behavioral — untested, see Extensions above).
 
 ---
 
